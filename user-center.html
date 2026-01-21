@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="index.html" class="btn btn-primary">退出登录</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 个人中心内容 -->
+    <section class="user-center">
+        <div class="container">
+            <div class="user-center-container">
+                <!-- 左边栏 -->
+                <div class="sidebar">
+                    <div class="user-profile">
+                        <!-- 头像上传区域 -->
+                        <div class="avatar-container">
+                            <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                            <div class="avatar-wrapper">
+                                <img src="images/avatars/avatar-mkegcnno32gn-U.svg" alt="用户头像" class="profile-avatar" id="current-avatar">
+                                <div class="avatar-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>更换头像</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 名称修改区域 -->
+                        <div class="name-container">
+                            <h3 id="current-name">山水间</h3>
+                            <button class="edit-name-btn" id="edit-name-btn"><i class="fas fa-edit"></i> 编辑</button>
+                            <div class="name-edit-form" id="name-edit-form" style="display: none;">
+                                <input type="text" id="new-name" class="name-input" placeholder="请输入新昵称">
+                                <div class="name-edit-buttons">
+                                    <button type="button" id="save-name-btn" class="btn-save">保存</button>
+                                    <button type="button" id="cancel-name-btn" class="btn-cancel">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-level">黄金会员</div>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li><a href="#home" class="active" data-content="home"><i class="fas fa-home"></i> 我的主页</a></li>
+                        <li><a href="#trips" data-content="trips"><i class="fas fa-route"></i> 我的行程</a></li>
+                        <li><a href="#orders" data-content="orders"><i class="fas fa-shopping-cart"></i> 我的订单</a></li>
+                        <li><a href="#favorites" data-content="favorites"><i class="fas fa-heart"></i> 我的收藏</a></li>
+                        <li><a href="#membership" data-content="membership"><i class="fas fa-crown"></i> 会员中心</a></li>
+                        <li><a href="#settings" data-content="settings"><i class="fas fa-cog"></i> 设置</a></li>
+                    </ul>
+                </div>
+
+                <!-- 中间主区域 -->
+                <div class="main-content">
+                    <!-- 内容区域 -->
+                    <div id="content-home" class="content-section active">
+                        <!-- 欢迎回来 -->
+                        <div class="welcome-section">
+                            <div class="welcome-text">
+                                <h2>欢迎回来，<span id="welcome-name">山水间</span>！</h2>
+                                <p>今天是2026年1月14日，秦岭的天气晴朗，适合户外活动。</p>
+                            </div>
+                            <div class="weather-info">
+                                <i class="fas fa-sun"></i>
+                                <div>
+                                    <h4>秦岭天气</h4>
+                                    <p>晴 12°C - 20°C</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 我的近期行程 -->
+                        <div class="trips-section">
+                            <div class="section-header">
+                                <h3>我的近期行程</h3>
+                                <a href="#" class="btn btn-primary">查看全部</a>
+                            </div>
+                            <div class="trip-cards">
+                                <div class="trip-card">
+                                    <img src="images/autumn-13.jpg" alt="行程1">
+                                    <div class="trip-info">
+                                        <h4>秦岭三日游</h4>
+                                        <p>2026-01-20 至 2026-01-22</p>
+                                        <p>已规划</p>
+                                    </div>
+                                </div>
+                                <div class="trip-card">
+                                    <img src="images/autumn-14.jpg" alt="行程2">
+                                    <div class="trip-info">
+                                        <h4>太平峪徒步</h4>
+                                        <p>2026-02-03</p>
+                                        <p>已预定</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 我的足迹地图 -->
+                    <div class="footprint-section">
+                        <div class="section-header">
+                            <h3>我的足迹地图</h3>
+                            <button class="btn btn-primary" id="add-marker-btn">添加标记</button>
+                            <button class="btn btn-secondary" id="clear-markers-btn">清除标记</button>
+                        </div>
+                        <!-- 地图容器 -->
+                        <div class="footprint-map">
+                            <div id="map-container" style="width: 100%; height: 400px; display: flex; align-items: center; justify-content: center; background-color: #f0f0f0;">
+                                <!-- 直接使用中国地图图片 -->
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/China_map_blank.svg/1200px-China_map_blank.svg.png" 
+                                     alt="中国地图" 
+                                     style="width: 100%; height: 100%; object-fit: contain; border-radius: 5px; background-color: white;">
+                            </div>
+                        </div>
+                        
+                        <!-- 自定义标记名称输入模态框 -->
+                        <div id="marker-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+                            <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-color);">添加标记</h3>
+                                <div style="margin-bottom: 20px;">
+                                    <label for="marker-name" style="display: block; margin-bottom: 10px; font-weight: bold;">标记名称：</label>
+                                    <input type="text" id="marker-name" placeholder="请输入标记名称" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                                </div>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button id="cancel-marker" class="btn btn-secondary" style="padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">取消</button>
+                                    <button id="confirm-marker" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 自定义确认模态框 -->
+                        <div id="confirm-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+                            <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-color);">确认操作</h3>
+                                <p id="confirm-message" style="margin-bottom: 20px;"></p>
+                                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                                    <button id="cancel-confirm" class="btn btn-secondary" style="padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">取消</button>
+                                    <button id="confirm-confirm" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- 自定义提示模态框 -->
+                        <div id="alert-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+                            <div style="background-color: white; padding: 30px; border-radius: 10px; width: 90%; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);">
+                                <h3 style="margin-top: 0; margin-bottom: 20px; color: var(--primary-color);">提示</h3>
+                                <p id="alert-message" style="margin-bottom: 20px;"></p>
+                                <div style="display: flex; justify-content: flex-end;">
+                                    <button id="close-alert" class="btn btn-primary" style="padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">确定</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 标记列表 -->
+                        <div class="marker-list" id="marker-list">
+                            <h4 style="margin-top: 20px; margin-bottom: 15px; color: var(--primary-color);">我的标记地点</h4>
+                            <div id="markers-container"></div>
+                        </div>
+                    </div>
+
+                        <!-- 会员特权 -->
+                        <div class="privileges-section">
+                            <div class="section-header">
+                                <h3>会员特权</h3>
+                                <a href="#" class="btn btn-primary">升级会员</a>
+                            </div>
+                            <ul class="privileges-list">
+                                <li>
+                                    <span><i class="fas fa-tags"></i> 专属折扣</span>
+                                    <span>8.5折</span>
+                                </li>
+                                <li>
+                                    <span><i class="fas fa-user-tie"></i> 专属顾问</span>
+                                    <span>已开通</span>
+                                </li>
+                                <li>
+                                    <span><i class="fas fa-star"></i> 优先报名活动</span>
+                                    <span>已开通</span>
+                                </li>
+                                <li>
+                                    <span><i class="fas fa-gift"></i> 免费体验项目</span>
+                                    <span>2次/月</span>
+                                </li>
+                                <li>
+                                    <span><i class="fas fa-headset"></i> 优先客服</span>
+                                    <span>5分钟响应</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 我的行程 -->
+                    <div id="content-trips" class="content-section">
+                        <h2 class="content-title">我的行程</h2>
+                        <div class="trips-list">
+                            <div class="trip-item">
+                                <img src="images/autumn-15.jpg" alt="秦岭三日游">
+                                <div class="trip-details">
+                                    <h3>秦岭三日游</h3>
+                                    <p>2026-01-20 至 2026-01-22</p>
+                                    <p>已规划</p>
+                                    <button class="btn btn-primary">查看详情</button>
+                                </div>
+                            </div>
+                            <div class="trip-item">
+                                <img src="images/autumn-16.jpg" alt="太平峪徒步">
+                                <div class="trip-details">
+                                    <h3>太平峪徒步</h3>
+                                    <p>2026-02-03</p>
+                                    <p>已预定</p>
+                                    <button class="btn btn-primary">查看详情</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的订单 -->
+                    <div id="content-orders" class="content-section">
+                        <h2 class="content-title">我的订单</h2>
+                        <div class="orders-list">
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <h3>订单号：20260114001</h3>
+                                    <p>下单时间：2026-01-14 10:30</p>
+                                    <p>订单状态：已完成</p>
+                                </div>
+                                <div class="order-amount">
+                                    <span>¥ 399</span>
+                                    <button class="btn btn-primary">查看详情</button>
+                                </div>
+                            </div>
+                            <div class="order-item">
+                                <div class="order-info">
+                                    <h3>订单号：20260110002</h3>
+                                    <p>下单时间：2026-01-10 15:45</p>
+                                    <p>订单状态：已完成</p>
+                                </div>
+                                <div class="order-amount">
+                                    <span>¥ 299</span>
+                                    <button class="btn btn-primary">查看详情</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的收藏 -->
+                    <div id="content-favorites" class="content-section">
+                        <h2 class="content-title">我的收藏</h2>
+                        <div class="favorites-grid">
+                            <div class="favorite-item">
+                                <img src="images/autumn-1.jpg" alt="秦岭三日游">
+                                <h3>秦岭三日游</h3>
+                                <p>经典线路</p>
+                                <button class="btn btn-secondary">取消收藏</button>
+                            </div>
+                            <div class="favorite-item">
+                                <img src="images/autumn-2.jpg" alt="太平峪徒步">
+                                <h3>太平峪徒步</h3>
+                                <p>户外探险</p>
+                                <button class="btn btn-secondary">取消收藏</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 会员中心 -->
+                    <div id="content-membership" class="content-section">
+                        <h2 class="content-title">会员中心</h2>
+                        <div class="membership-info">
+                            <div class="current-level">
+                                <h3>当前等级：黄金会员</h3>
+                                <p>有效期：2026-01-14 至 2027-01-14</p>
+                            </div>
+                            <div class="upgrade-section">
+                                <h3>升级到铂金会员</h3>
+                                <p>享受更多专属特权</p>
+                                <button class="btn btn-primary">立即升级</button>
+                            </div>
+                            <div class="privileges-list">
+                                <h3>我的特权</h3>
+                                <ul>
+                                    <li><i class="fas fa-tags"></i> 专属折扣：8.5折</li>
+                                    <li><i class="fas fa-user-tie"></i> 专属顾问：已开通</li>
+                                    <li><i class="fas fa-star"></i> 优先报名活动：已开通</li>
+                                    <li><i class="fas fa-gift"></i> 免费体验项目：2次/月</li>
+                                    <li><i class="fas fa-headset"></i> 优先客服：5分钟响应</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 设置 -->
+                    <div id="content-settings" class="content-section">
+                        <h2 class="content-title">设置</h2>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="setting-phone">手机号</label>
+                                <input type="text" id="setting-phone" value="138****8888" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-email">邮箱</label>
+                                <input type="email" id="setting-email" value="example@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-password">修改密码</label>
+                                <input type="password" id="setting-password" placeholder="请输入新密码">
+                            </div>
+                            <div class="form-group">
+                                <label for="setting-notification">消息通知</label>
+                                <div class="notification-options">
+                                    <label><input type="checkbox" checked> 行程提醒</label>
+                                    <label><input type="checkbox" checked> 优惠活动</label>
+                                    <label><input type="checkbox"> 商家推荐</label>
+                                </div>
+                            </div>
+                            <button class="btn btn-primary">保存设置</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

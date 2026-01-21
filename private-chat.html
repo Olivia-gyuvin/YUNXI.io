@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私信聊天 - 秦岭旅友圈</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 私信聊天页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+            --chat-bg: #F0F2F5;
+            --chat-message-sent: #DCF8C6;
+            --chat-message-received: white;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .chat-container {
+            display: flex;
+            height: calc(100vh - 160px);
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        /* 左侧聊天列表 */
+        .chat-sidebar {
+            width: 300px;
+            border-right: 1px solid var(--community-border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--community-border);
+            background-color: white;
+        }
+        
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 0;
+            color: var(--community-text-primary);
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--community-border);
+            border-radius: 25px;
+            margin-top: 15px;
+            font-size: 14px;
+            background-color: var(--chat-bg);
+        }
+        
+        .chat-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: white;
+        }
+        
+        .chat-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--community-border);
+            transition: all 0.3s ease;
+        }
+        
+        .chat-item:hover {
+            background-color: var(--chat-bg);
+        }
+        
+        .chat-item.active {
+            background-color: rgba(58, 139, 95, 0.1);
+            border-right: 3px solid var(--community-green);
+        }
+        
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .chat-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .chat-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--community-text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .chat-time {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .chat-preview {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .unread-count {
+            background-color: #FF5722;
+            color: white;
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        /* 右侧聊天区域 */
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-main-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--community-border);
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .current-chat-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .current-chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+        
+        .current-chat-name {
+            font-weight: bold;
+            font-size: 18px;
+            color: var(--community-text-primary);
+        }
+        
+        .current-chat-status {
+            font-size: 14px;
+            color: var(--community-green);
+            margin-top: 3px;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-icon {
+            font-size: 20px;
+            color: var(--community-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover {
+            color: var(--community-green);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            background-color: var(--chat-bg);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .message {
+            display: flex;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+        
+        .message.sent {
+            align-self: flex-end;
+            justify-content: flex-end;
+        }
+        
+        .message.received {
+            align-self: flex-start;
+            justify-content: flex-start;
+        }
+        
+        .message-content {
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+        
+        .message.sent .message-content {
+            background-color: var(--chat-message-sent);
+            border-bottom-right-radius: 4px;
+        }
+        
+        .message.received .message-content {
+            background-color: var(--chat-message-received);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message-text {
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--community-text-primary);
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+            margin-top: 5px;
+            text-align: right;
+        }
+        
+        .message.received .message-time {
+            text-align: left;
+        }
+        
+        .message-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 10px;
+        }
+        
+        .message.sent .message-avatar {
+            order: 2;
+        }
+        
+        .message.received .message-avatar {
+            order: 1;
+        }
+        
+        /* 消息输入区域 */
+        .chat-input-area {
+            padding: 20px;
+            border-top: 1px solid var(--community-border);
+            background-color: white;
+        }
+        
+        .input-container {
+            display: flex;
+            align-items: flex-end;
+            gap: 10px;
+            background-color: var(--chat-bg);
+            border-radius: 25px;
+            padding: 10px 15px;
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .input-action {
+            font-size: 20px;
+            color: var(--community-text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .input-action:hover {
+            color: var(--community-green);
+        }
+        
+        .message-input {
+            flex: 1;
+            border: none;
+            background-color: transparent;
+            padding: 12px;
+            font-size: 16px;
+            resize: none;
+            min-height: 40px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+        
+        .message-input:focus {
+            outline: none;
+        }
+        
+        .send-button {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+        
+        .send-button:hover {
+            background-color: #2d6a4f;
+        }
+        
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: var(--community-text-secondary);
+            text-align: center;
+        }
+        
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--community-text-primary);
+        }
+        
+        /* 页面头部 */
+        .page-header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin: 0;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .chat-sidebar {
+                width: 100%;
+                height: 50%;
+                border-right: none;
+                border-bottom: 1px solid var(--community-border);
+            }
+            
+            .chat-main {
+                height: 50%;
+            }
+            
+            .message {
+                max-width: 95%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面头部 -->
+    <div class="page-header">
+        <div>
+            <a href="community.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                返回社区
+            </a>
+            <h1 class="page-title">私信聊天</h1>
+        </div>
+        <button class="btn btn-primary" onclick="openNewChat()">
+            <i class="fas fa-plus"></i> 新消息
+        </button>
+    </div>
+
+    <!-- 聊天主容器 -->
+    <div class="container">
+        <div class="chat-container">
+            <!-- 左侧聊天列表 -->
+            <div class="chat-sidebar">
+                <div class="sidebar-header">
+                    <h2 class="sidebar-title">消息列表</h2>
+                    <input type="text" class="search-box" placeholder="🔍 搜索聊天">
+                </div>
+                <div class="chat-list">
+                    <div class="chat-item active">
+                        <img src="images/avatars/avatar-mkegcnlwq7sv-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">周末登山组</div>
+                                <div class="chat-time">10:30</div>
+                            </div>
+                            <div class="chat-preview">好的，那我们周六见！</div>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <img src="images/avatars/avatar-mkegcnlw8aoo-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">李妈妈亲子游</div>
+                                <div class="chat-time">昨天</div>
+                                <div class="unread-count">2</div>
+                            </div>
+                            <div class="chat-preview">谢谢你的攻略，我们周末准备去试试</div>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <img src="images/avatars/avatar-mkegcnlwnlk6-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">王摄影师</div>
+                                <div class="chat-time">3天前</div>
+                            </div>
+                            <div class="chat-preview">太平峪的枫叶已经红了，推荐你去拍...</div>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <img src="images/avatars/avatar-mkegcnlxizyg-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">张向导</div>
+                                <div class="chat-time">1周前</div>
+                            </div>
+                            <div class="chat-preview">你好，有什么可以帮助你的吗？</div>
+                        </div>
+                    </div>
+                    <div class="chat-item">
+                        <img src="images/avatars/avatar-mkegcnlxu2d4-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-header">
+                                <div class="chat-name">生态志愿者</div>
+                                <div class="chat-time">2周前</div>
+                            </div>
+                            <div class="chat-preview">下周有生态保护活动，你有兴趣参加吗？</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧聊天区域 -->
+            <div class="chat-main">
+                <div class="chat-main-header">
+                    <div class="current-chat-info">
+                        <img src="images/avatars/avatar-mkegcnlxxkmv-U.svg" alt="用户头像" class="current-chat-avatar">
+                        <div>
+                            <div class="current-chat-name">周末登山组</div>
+                            <div class="current-chat-status"><i class="fas fa-circle" style="font-size: 8px; margin-right: 5px;"></i> 在线</div>
+                        </div>
+                    </div>
+                    <div class="chat-actions">
+                        <i class="fas fa-phone action-icon"></i>
+                        <i class="fas fa-video action-icon"></i>
+                        <i class="fas fa-ellipsis-v action-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="chat-messages">
+                    <div class="message received">
+                        <img src="images/avatars/avatar-mkegcnlxpl0n-U.svg" alt="用户头像" class="message-avatar">
+                        <div class="message-content">
+                            <div class="message-text">你好！关于周六的徒步活动，我们早上8点在太平峪景区门口集合，你能准时到吗？</div>
+                            <div class="message-time">昨天 14:30</div>
+                        </div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-content">
+                            <div class="message-text">你好！我能准时到的，需要准备什么装备吗？</div>
+                            <div class="message-time">昨天 14:35</div>
+                        </div>
+                        <img src="images/avatars/avatar-mkegcnlytnt0-我.svg" alt="我的头像" class="message-avatar">
+                    </div>
+                    <div class="message received">
+                        <img src="images/avatars/avatar-mkegcnly616a-U.svg" alt="用户头像" class="message-avatar">
+                        <div class="message-content">
+                            <div class="message-text">建议穿登山鞋，带登山杖、足够的水和午餐，还有防晒用品</div>
+                            <div class="message-time">昨天 14:40</div>
+                        </div>
+                    </div>
+                    <div class="message received">
+                        <img src="images/avatars/avatar-mkegcnlzu2n3-U.svg" alt="用户头像" class="message-avatar">
+                        <div class="message-content">
+                            <div class="message-text">路线是东线环线，总里程12公里，海拔上升800米，中等难度</div>
+                            <div class="message-time">昨天 14:41</div>
+                        </div>
+                    </div>
+                    <div class="message sent">
+                        <div class="message-content">
+                            <div class="message-text">好的，我明白了，那我们周六见！</div>
+                            <div class="message-time">昨天 14:45</div>
+                        </div>
+                        <img src="images/avatars/avatar-mkegcnm0mkrc-我.svg" alt="我的头像" class="message-avatar">
+                    </div>
+                    <div class="message received">
+                        <img src="images/avatars/avatar-mkegcnm0en3l-U.svg" alt="用户头像" class="message-avatar">
+                        <div class="message-content">
+                            <div class="message-text">周六见！注意安全，保持通讯畅通</div>
+                            <div class="message-time">今天 10:30</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-area">
+                    <div class="input-container">
+                        <div class="input-actions">
+                            <i class="fas fa-smile input-action"></i>
+                            <i class="fas fa-image input-action"></i>
+                            <i class="fas fa-paperclip input-action"></i>
+                        </div>
+                        <textarea class="message-input" placeholder="输入消息..." id="messageInput" onkeydown="handleKeyDown(event)"></textarea>
+                        <button class="send-button" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 新消息模态框 -->
+    <div id="new-chat-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>新消息</h3>
+                <button style="background: none; border: none; font-size: 24px; cursor: pointer;" onclick="closeNewChat()">&times;</button>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <input type="text" class="search-box" placeholder="🔍 搜索用户" style="margin-bottom: 15px;">
+                <div style="max-height: 300px; overflow-y: auto;">
+                    <div class="chat-item" onclick="selectChat('李妈妈亲子游', 'images/avatar-2.jpg')">
+                        <img src="images/avatars/avatar-mkegcnm1t8dw-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-name">李妈妈亲子游</div>
+                            <div class="chat-preview">同城 | 关注了相同的圈子</div>
+                        </div>
+                    </div>
+                    <div class="chat-item" onclick="selectChat('王摄影师', 'images/avatar-3.jpg')">
+                        <img src="images/avatars/avatar-mkegcnm1b1xd-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-name">王摄影师</div>
+                            <div class="chat-preview">认证摄影师 | 共同参与过活动</div>
+                        </div>
+                    </div>
+                    <div class="chat-item" onclick="selectChat('张向导', 'images/avatar-1.jpg')">
+                        <img src="images/avatars/avatar-mkegcnm1dvs3-U.svg" alt="用户头像" class="chat-avatar">
+                        <div class="chat-info">
+                            <div class="chat-name">张向导</div>
+                            <div class="chat-preview">专业向导 | 已帮助100+人</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 打开新消息模态框
+        function openNewChat() {
+            document.getElementById('new-chat-modal').style.display = 'flex';
+        }
+        
+        // 关闭新消息模态框
+        function closeNewChat() {
+            document.getElementById('new-chat-modal').style.display = 'none';
+        }
+        
+        // 选择聊天对象
+        function selectChat(name, avatarUrl) {
+            console.log('选择聊天对象:', name);
+            closeNewChat();
+        }
+        
+        // 发送消息
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                // 创建新消息元素
+                const chatMessages = document.querySelector('.chat-messages');
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message sent';
+                messageElement.innerHTML = `
+                    <div class="message-content">
+                        <div class="message-text">${message}</div>
+                        <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                    <img src="images/avatars/avatar-mkegcnm19fgl-我.svg" alt="我的头像" class="message-avatar">
+                `;
+                
+                // 添加到聊天列表
+                chatMessages.appendChild(messageElement);
+                
+                // 清空输入框
+                input.value = '';
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // 模拟回复（500ms后）
+                setTimeout(() => {
+                    const replyMessage = document.createElement('div');
+                    replyMessage.className = 'message received';
+                    replyMessage.innerHTML = `
+                        <img src="images/avatars/avatar-mkegcnm2z97h-U.svg" alt="用户头像" class="message-avatar">
+                        <div class="message-content">
+                            <div class="message-text">收到，谢谢！</div>
+                            <div class="message-time">${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                        </div>
+                    `;
+                    chatMessages.appendChild(replyMessage);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 500);
+            }
+        }
+        
+        // 处理键盘事件
+        function handleKeyDown(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        // 点击聊天项切换聊天
+        document.querySelectorAll('.chat-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('.chat-item').forEach(chatItem => {
+                    chatItem.classList.remove('active');
+                });
+                // 添加当前active类
+                this.classList.add('active');
+            });
+        });
+        
+        // 搜索聊天功能
+        const chatSearchInput = document.querySelector('.sidebar-header .search-box');
+        if (chatSearchInput) {
+            chatSearchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const chatItems = document.querySelectorAll('.chat-item');
+                
+                chatItems.forEach(item => {
+                    const chatName = item.querySelector('.chat-name').textContent.toLowerCase();
+                    const chatPreview = item.querySelector('.chat-preview').textContent.toLowerCase();
+                    
+                    if (chatName.includes(searchTerm) || chatPreview.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // 聊天头部功能
+        document.querySelectorAll('.action-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const action = this.classList[1].split('-')[1];
+                switch(action) {
+                    case 'phone':
+                        alert('语音通话功能开发中...');
+                        break;
+                    case 'video':
+                        alert('视频通话功能开发中...');
+                        break;
+                    case 'ellipsis':
+                        alert('更多功能开发中...');
+                        break;
+                }
+            });
+        });
+        
+        // 输入框功能
+        document.querySelectorAll('.input-action').forEach(action => {
+            action.addEventListener('click', function() {
+                const actionType = this.classList[1].split('-')[1];
+                switch(actionType) {
+                    case 'smile':
+                        alert('表情功能开发中...');
+                        break;
+                    case 'image':
+                        alert('图片发送功能开发中...');
+                        break;
+                    case 'paperclip':
+                        alert('文件发送功能开发中...');
+                        break;
+                }
+            });
+        });
+        
+        // 点击模态框外部关闭
+        document.getElementById('new-chat-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // 新消息模态框中的搜索功能
+        const newChatSearch = document.querySelector('#new-chat-modal .search-box');
+        if (newChatSearch) {
+            newChatSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const chatItems = document.querySelectorAll('#new-chat-modal .chat-item');
+                
+                chatItems.forEach(item => {
+                    const chatName = item.querySelector('.chat-name').textContent.toLowerCase();
+                    const chatPreview = item.querySelector('.chat-preview').textContent.toLowerCase();
+                    
+                    if (chatName.includes(searchTerm) || chatPreview.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+    </script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>

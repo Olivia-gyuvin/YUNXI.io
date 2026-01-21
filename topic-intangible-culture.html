@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#非遗体验分享 - 秦岭旅友圈</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 话题页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .topic-header {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        .topic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .topic-title-section {
+            flex: 1;
+        }
+        
+        .topic-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .topic-description {
+            font-size: 16px;
+            color: var(--community-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .topic-stats {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .topic-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .topic-action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .post-btn {
+            background-color: var(--community-bg);
+            color: var(--community-text-primary);
+            border: 1px solid var(--community-border);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: var(--community-border);
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 3;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            background-color: var(--community-bg);
+            padding: 5px;
+            border-radius: 25px;
+            max-width: fit-content;
+            margin: 20px;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            background-color: transparent;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: white;
+            color: var(--community-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .posts-list {
+            padding: 0 20px 20px;
+        }
+        
+        .post-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--community-border);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .post-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-stat:hover {
+            color: var(--community-green);
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--community-border);
+        }
+        
+        /* 相关话题 */
+        .related-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .related-topic-item {
+            margin-bottom: 12px;
+        }
+        
+        .related-topic-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .related-topic-link:hover {
+            color: var(--community-green);
+        }
+        
+        .related-topic-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 活跃用户 */
+        .active-users {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .active-user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .active-user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .active-user-info {
+            flex: 1;
+        }
+        
+        .active-user-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .active-user-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--community-border);
+            background-color: white;
+            color: var(--community-text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--community-green);
+            color: var(--community-green);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+            
+            .topic-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .topic-action-buttons {
+                width: 100%;
+            }
+            
+            .follow-btn,
+            .post-btn {
+                flex: 1;
+            }
+            
+            .topic-stats {
+                gap: 20px;
+            }
+            
+            .post-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .post-image {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 话题页面内容 -->
+    <div class="container">
+        <!-- 话题头部 -->
+        <div class="topic-header">
+            <a href="community.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                返回社区
+            </a>
+            
+            <div class="topic-info">
+                <div class="topic-title-section">
+                    <h1 class="topic-title">#非遗体验分享</h1>
+                    <p class="topic-description">分享秦岭地区非物质文化遗产的体验感受、传承故事、技艺展示等，让更多人了解和关注非遗文化，共同保护和传承这些宝贵的文化财富。</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-file-alt"></i>
+                            <span>321 帖子</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-users"></i>
+                            <span>543 关注者</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-clock"></i>
+                            <span>最近更新: 1天前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-action-buttons">
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i> 关注话题
+                    </button>
+                    <button class="post-btn">
+                        <i class="fas fa-edit"></i> 发布帖子
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content-container">
+            <!-- 主内容区 -->
+            <div class="main-content">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">热门</button>
+                    <button class="filter-tab">最新</button>
+                    <button class="filter-tab">精华</button>
+                    <button class="filter-tab">关注</button>
+                </div>
+                
+                <div class="posts-list">
+                    <!-- 帖子1 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user40.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">文化爱好者</div>
+                                <div class="post-meta">
+                                    <span>1天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#非遗体验分享 #剪纸</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                上周在户县体验了剪纸艺术，太震撼了！<br>
+                                <br>
+                                📍 地点：户县剪纸艺术博物馆<br>
+                                🎨 体验内容：跟着非遗传承人学习剪纸<br>
+                                ⏰ 时长：2小时<br>
+                                <br>
+                                传承人张老师耐心地教我们从基础的折纸开始，一步步完成了一幅简单的窗花。看着自己亲手剪出来的作品，真的很有成就感！<br>
+                                <br>
+                                户县剪纸有着悠久的历史，2006年被列入第一批国家级非物质文化遗产名录。张老师说，现在学习剪纸的年轻人越来越少，希望更多人能关注和传承这项技艺。<br>
+                                <br>
+                                强烈推荐大家去体验一下，感受传统技艺的魅力！
+                            </div>
+                            <div class="post-images">
+                                <img src="images/jianzhi1.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/jianzhi2.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/jianzhi3.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>212</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>43</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>67</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子2 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user41.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">非遗传承人</div>
+                                <div class="post-meta">
+                                    <span>3天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#非遗体验分享 #社火</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                作为社火脸谱的传承人，我想和大家分享一下社火的故事。<br>
+                                <br>
+                                社火是秦岭地区传统的民间艺术形式，已有数千年的历史。社火脸谱是社火的重要组成部分，每一张脸谱都有其独特的含义和故事。<br>
+                                <br>
+                                绘制社火脸谱需要经过多道工序：<br>
+                                1. 打底：用白色颜料均匀涂抹脸谱<br>
+                                2. 勾线：用墨线勾勒出基本轮廓<br>
+                                3. 填色：根据角色性格填充不同颜色<br>
+                                4. 点睛：最后画上眼睛，赋予脸谱灵魂<br>
+                                <br>
+                                红色代表忠勇，黑色代表刚正，白色代表奸诈，黄色代表勇猛……每一种颜色都有其特殊的象征意义。<br>
+                                <br>
+                                希望更多年轻人能了解社火文化，让这项传统技艺得以传承和发扬！
+                            </div>
+                            <div class="post-images">
+                                <img src="images/lianpu2.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/lianpu1.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>189</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>56</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>78</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子3 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user42.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">游客小李</div>
+                                <div class="post-meta">
+                                    <span>5天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#非遗体验分享 #泥塑</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                今天在凤翔体验了泥塑制作，太有趣了！<br>
+                                <br>
+                                📍 地点：凤翔泥塑村<br>
+                                🎨 体验内容：制作小泥人<br>
+                                💰 费用：50元/人<br>
+                                <br>
+                                凤翔泥塑是陕西的传统民间艺术，以其造型夸张、色彩鲜艳而闻名。我们跟着老师学习了制作一个小老虎泥塑，从揉泥、塑形到上色，每一步都很有讲究。<br>
+                                <br>
+                                最有意思的是上色环节，老师教我们用传统的矿物颜料，颜色特别鲜艳，而且不容易褪色。看着自己亲手制作的小老虎，心里美滋滋的！<br>
+                                <br>
+                                推荐大家去凤翔泥塑村看看，那里有很多非遗传承人现场制作，可以近距离感受泥塑艺术的魅力。
+                            </div>
+                            <div class="post-images">
+                                <img src="images/nisu1.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/nisu2.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/nisu3.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>156</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>34</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>52</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子4 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user43.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">传统文化研究者</div>
+                                <div class="post-meta">
+                                    <span>7天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#非遗体验分享 #皮影戏</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                分享一下我对皮影戏的研究和体验。<br>
+                                <br>
+                                皮影戏是中国传统的民间戏剧形式，在秦岭地区有着深厚的群众基础。它通过灯光照射兽皮或纸板做成的人物剪影来表演故事，被誉为"最早的电影"。<br>
+                                <br>
+                                上周在华县观看了一场传统皮影戏《白蛇传》，演员们技艺精湛，配合默契，将故事演绎得栩栩如生。尤其是皮影的制作工艺，非常精美，每一个细节都栩栩如生。<br>
+                                <br>
+                                华县皮影戏已被列入国家级非物质文化遗产名录，但目前面临着传承困难的问题。希望更多人能关注和支持皮影戏，让这项古老的艺术形式继续发扬光大。<br>
+                                <br>
+                                推荐大家去华县体验一下皮影戏，绝对会让你大开眼界！
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>134</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>28</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>45</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination">
+                    <button class="pagination-btn">上一页</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn">下一页</button>
+                </div>
+            </div>
+            
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <!-- 相关话题 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">相关话题</h3>
+                    <ul class="related-topics">
+                        <li class="related-topic-item">
+                            <a href="topic-taipingyu.html" class="related-topic-link">
+                                <span>#太平峪攻略</span>
+                                <span class="related-topic-posts">1.2k 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-autumn-photo.html" class="related-topic-link">
+                                <span>#秦岭秋色摄影</span>
+                                <span class="related-topic-posts">876 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-family-hiking.html" class="related-topic-link">
+                                <span>#亲子徒步推荐</span>
+                                <span class="related-topic-posts">654 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-farm-food.html" class="related-topic-link">
+                                <span>#农家乐美食</span>
+                                <span class="related-topic-posts">432 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-eco-protection.html" class="related-topic-link">
+                                <span>#生态保护行动</span>
+                                <span class="related-topic-posts">289 帖子</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 活跃用户 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题活跃用户</h3>
+                    <ul class="active-users">
+                        <li class="active-user-item">
+                            <img src="images/user40.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">文化爱好者</div>
+                                <div class="active-user-posts">18 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user41.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">非遗传承人</div>
+                                <div class="active-user-posts">15 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user42.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">游客小李</div>
+                                <div class="active-user-posts">12 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user43.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">传统文化研究者</div>
+                                <div class="active-user-posts">10 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user44.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">文化志愿者</div>
+                                <div class="active-user-posts">8 帖子</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 话题规则 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题规则</h3>
+                    <ul style="font-size: 14px; color: var(--community-text-secondary); line-height: 1.6; padding-left: 20px;">
+                        <li>1. 请发布与非遗体验相关的内容</li>
+                        <li>2. 尊重非遗文化，分享真实体验</li>
+                        <li>3. 保护非遗传承人的知识产权</li>
+                        <li>4. 禁止发布广告和违法内容</li>
+                        <li>5. 鼓励分享原创内容和故事</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 筛选标签切换
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active类
+                this.classList.add('active');
+                
+                // 模拟筛选结果
+                alert(`切换到${this.textContent}帖子功能开发中...`);
+            });
+        });
+        
+        // 分页功能实现
+        const posts = document.querySelector('.posts-list');
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        // 不同页码的评论数据
+        const pageData = {
+            1: `
+                <!-- 帖子1 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user41.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">非遗传承人</div>
+                            <div class="post-meta">
+                                <span>2小时前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #手工</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            今天给大家分享一下秦岭地区的非遗文化——皮影戏制作工艺：<br>
+                            <br>
+                            皮影戏是中国传统民间艺术，秦岭地区的皮影制作历史悠久，工艺精湛。制作过程包括选皮、制皮、画稿、过稿、镂刻、敷彩、发汗熨平、缀结合成等8道工序，每道工序都需要精湛的技艺和耐心。
+                            <br>
+                            欢迎大家来体验学习！
+                        </div>
+                        <div class="post-images">
+                            <img src="images/piying1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/piying2.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/piying3.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>156</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>28</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子2 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user43.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">文化爱好者</div>
+                            <div class="post-meta">
+                                <span>1天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #剪纸</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            上周参加了秦岭地区的非遗剪纸体验活动，收获满满！<br>
+                            <br>
+                            老师教我们剪了传统的窗花和动物图案，虽然第一次剪得不太好，但是过程很有趣，也了解了很多关于剪纸的历史和文化背景。
+                            <br>
+                            推荐大家有机会都去体验一下！
+                        </div>
+                        <div class="post-images">
+                            <img src="images/jianzhi1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/jianzhi2.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>123</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>36</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>54</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            2: `
+                <!-- 帖子3 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user44.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">民俗研究员</div>
+                            <div class="post-meta">
+                                <span>3天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #研究</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            秦岭地区非遗文化现状调研：<br>
+                            <br>
+                            近期对秦岭地区的非遗文化进行了调研，发现目前有国家级非遗项目12项，省级56项，市县级128项。主要包括传统戏剧、传统手工艺、传统音乐、传统舞蹈等类别。
+                            <br>
+                            虽然政府和社会各界都在努力保护，但仍面临传承困难、市场萎缩等问题。
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>98</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>24</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>31</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子4 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user45.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">手工爱好者</div>
+                            <div class="post-meta">
+                                <span>5天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #学习</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            学习非遗泥塑的心得体会：<br>
+                            <br>
+                            学习泥塑已经有半年了，从最初的捏不好到现在能独立完成简单的作品，收获了很多。泥塑不仅是一种手工技艺，更是一种文化传承。
+                            <br>
+                            感谢老师的耐心指导，也感谢非遗文化让我找到了新的兴趣爱好！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>89</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>23</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>34</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            3: `
+                <!-- 帖子5 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user46.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">景区工作人员</div>
+                            <div class="post-meta">
+                                <span>1周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #景区</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            好消息！我们景区将在国庆期间推出非遗体验活动：<br>
+                            <br>
+                            📅 时间：10月1日-10月7日<br>
+                            📍 地点：秦岭景区非遗文化展示中心<br>
+                            🎪 内容：皮影戏表演、剪纸体验、泥塑制作、传统音乐演奏<br>
+                            💰 费用：免费体验，部分项目需预约
+                            <br>
+                            欢迎大家前来体验！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>145</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>42</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>58</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子6 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user47.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">传统音乐家</div>
+                            <div class="post-meta">
+                                <span>2周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #音乐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            分享一段我演奏的传统乐器——古筝曲《高山流水》：<br>
+                            <br>
+                            古筝是中国传统乐器，音色优美，表现力丰富。这段曲子描绘了秦岭山水的壮丽景色，希望大家喜欢！
+                            <br>
+                            有兴趣学习传统音乐的朋友可以联系我，我可以免费指导。
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>112</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>27</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>35</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            4: `
+                <!-- 帖子7 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user48.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">非遗志愿者</div>
+                            <div class="post-meta">
+                                <span>3周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #志愿者</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            作为非遗志愿者的日子：<br>
+                            <br>
+                            我已经做了一年的非遗志愿者，主要负责非遗文化的宣传和推广工作。在这个过程中，我认识了很多非遗传承人，了解了很多非遗文化的背后故事。
+                            <br>
+                            虽然工作很辛苦，但是看到越来越多的人关注非遗文化，我感到非常欣慰。
+                            <br>
+                            希望更多的人加入到保护和传承非遗文化的行列中来！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>97</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>21</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>38</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子8 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user49.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">学生</div>
+                            <div class="post-meta">
+                                <span>1个月前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #学习</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            学校组织的非遗体验活动：<br>
+                            <br>
+                            上周学校组织我们去了非遗文化展示中心，体验了剪纸、泥塑、皮影戏等传统技艺。
+                            <br>
+                            我最喜欢的是皮影戏，我们还自己动手操作了皮影，非常有趣！
+                            <br>
+                            希望学校以后能多组织这样的活动，让我们更多地了解传统文化。
+                        </div>
+                        <div class="post-images">
+                            <img src="images/jianzhi1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/piying1.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>83</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>19</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>25</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            5: `
+                <!-- 帖子9 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user50.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">文化推广者</div>
+                            <div class="post-meta">
+                                <span>1个月前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #推广</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            如何更好地推广非遗文化：<br>
+                            <br>
+                            1. 利用新媒体平台，拍摄短视频、直播等形式宣传非遗文化<br>
+                            2. 举办非遗体验活动，让更多的人参与进来<br>
+                            3. 把非遗文化融入到旅游中，开发非遗旅游产品<br>
+                            4. 在学校开展非遗文化教育，培养年轻一代的兴趣
+                            <br>
+                            只有让更多的人了解和喜欢非遗文化，才能更好地保护和传承它。
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>105</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>29</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子10 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user41.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">非遗传承人</div>
+                            <div class="post-meta">
+                                <span>2个月前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#非遗体验分享 #传承</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            作为非遗传承人的感想：<br>
+                            <br>
+                            我是皮影戏的传承人，已经传承了三代。现在越来越多的年轻人对皮影戏感兴趣，我感到非常高兴。
+                            <br>
+                            我会继续努力，把这门传统技艺传承下去，让更多的人了解和喜欢皮影戏。
+                            <br>
+                            也希望政府和社会各界能给予更多的支持和帮助。
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>132</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>34</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>46</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+        
+        // 切换页码函数
+        function switchPage(pageNum) {
+            if (pageData[pageNum]) {
+                posts.innerHTML = pageData[pageNum];
+                
+                // 重新绑定事件
+                bindPostEvents();
+            } else {
+                // 当页码不存在时，显示友好提示或跳转到最后一页
+                alert(`第 ${pageNum} 页暂无内容，已跳转到最后一页`);
+                const lastPage = Object.keys(pageData).length;
+                if (lastPage > 0) {
+                    switchPage(lastPage);
+                    // 更新active状态
+                    paginationBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // 找到对应页码按钮并添加active类
+                    paginationBtns.forEach(btn => {
+                        if (parseInt(btn.textContent) === lastPage) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            }
+        }
+        
+        // 绑定帖子交互事件
+        function bindPostEvents() {
+            document.querySelectorAll('.post-stat').forEach(stat => {
+                stat.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const span = this.querySelector('span');
+                    
+                    if (icon.classList.contains('fa-heart')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    } else if (icon.classList.contains('fa-comment')) {
+                        alert('评论功能开发中...');
+                    } else if (icon.classList.contains('fa-share')) {
+                        alert('分享功能开发中...');
+                    } else if (icon.classList.contains('fa-bookmark')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    }
+                });
+            });
+        }
+        
+        // 分页按钮点击事件
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pageNum = parseInt(this.textContent);
+                
+                if (!isNaN(pageNum)) {
+                    // 移除所有active类
+                    paginationBtns.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加当前active类
+                    this.classList.add('active');
+                    
+                    // 切换页面内容
+                    switchPage(pageNum);
+                } else if (this.textContent.includes('上一页')) {
+                    // 上一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    if (currentPage > 1) {
+                        const prevPage = currentPage - 1;
+                        // 找到上一页按钮并点击
+                        paginationBtns.forEach(b => {
+                            if (parseInt(b.textContent) === prevPage) {
+                                b.click();
+                            }
+                        });
+                    }
+                } else if (this.textContent.includes('下一页')) {
+                    // 下一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    const nextPage = currentPage + 1;
+                    // 找到下一页按钮并点击
+                    paginationBtns.forEach(b => {
+                        if (parseInt(b.textContent) === nextPage) {
+                            b.click();
+                        }
+                    });
+                }
+            });
+        });
+        
+        // 初始化页面
+        bindPostEvents();
+        
+        // 关注话题功能
+        document.querySelector('.follow-btn').addEventListener('click', function() {
+            if (this.innerHTML.includes('关注话题')) {
+                this.innerHTML = '<i class="fas fa-check"></i> 已关注';
+                this.style.backgroundColor = '#2d6a4f';
+                alert('关注话题成功！');
+            } else {
+                this.innerHTML = '<i class="fas fa-plus"></i> 关注话题';
+                this.style.backgroundColor = 'var(--community-green)';
+                alert('已取消关注话题！');
+            }
+        });
+        
+        // 发布帖子功能
+        document.querySelector('.post-btn').addEventListener('click', function() {
+            alert('发布帖子功能开发中...');
+        });
+        
+        // 帖子交互功能
+        document.querySelectorAll('.post-stat').forEach(stat => {
+            stat.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+                
+                if (icon.classList.contains('fa-heart')) {
+                    // 点赞功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                } else if (icon.classList.contains('fa-comment')) {
+                    // 评论功能
+                    alert('评论功能开发中...');
+                } else if (icon.classList.contains('fa-share')) {
+                    // 分享功能
+                    alert('分享功能开发中...');
+                } else if (icon.classList.contains('fa-bookmark')) {
+                    // 收藏功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                }
+            });
+        });
+        
+        // 活跃用户交互
+        document.querySelectorAll('.active-user-item').forEach(user => {
+            user.addEventListener('click', function() {
+                const userName = this.querySelector('.active-user-name').textContent;
+                alert(`查看用户 ${userName} 详情功能开发中...`);
+            });
+        });
+        
+        // 相关话题交互
+        document.querySelectorAll('.related-topic-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 链接已经有href属性，这里可以添加额外的交互效果
+                console.log('点击相关话题:', this.textContent);
+            });
+        });
+        
+        // 帖子点击查看详情
+        document.querySelectorAll('.post-item').forEach(post => {
+            post.addEventListener('click', function(e) {
+                // 如果点击的是交互按钮，不触发查看详情
+                if (!e.target.closest('.post-stat')) {
+                    alert('查看帖子详情功能开发中...');
+                }
+            });
+        });
+    </script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>

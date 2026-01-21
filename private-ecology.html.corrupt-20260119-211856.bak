@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>私域生�?- 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="private-ecology">
+        <div class="container">
+            <h1 class="service-title">加入秦岭旅游�?/h1>
+            <p class="service-subtitle">不只是旅行，更是社群</p>
+            <div style="margin: 20px 0;">
+                <a href="community.html" class="btn btn-primary" style="padding: 12px 30px; font-size: 18px; background-color: #3A8B5F; border: none;">进入秦岭"旅友�?社区</a>
+            </div>
+
+            <!-- 会员等级展示 -->
+            <div class="membership-levels">
+                <h2 class="section-title">会员等级体系</h2>
+                <div class="level-progress">
+                    <div class="level active" data-level="0">
+                        <div class="level-circle" onclick="changeLevel(0)">1</div>
+                        <h4>注册</h4>
+                    </div>
+                    <div class="level" data-level="1">
+                        <div class="level-circle" onclick="changeLevel(1)">2</div>
+                        <h4>青铜会员</h4>
+                    </div>
+                    <div class="level" data-level="2">
+                        <div class="level-circle" onclick="changeLevel(2)">3</div>
+                        <h4>白银会员</h4>
+                    </div>
+                    <div class="level" data-level="3">
+                        <div class="level-circle" onclick="changeLevel(3)">4</div>
+                        <h4>黄金会员</h4>
+                    </div>
+                    <div class="level" data-level="4">
+                        <div class="level-circle" onclick="changeLevel(4)">5</div>
+                        <h4>铂金会员</h4>
+                    </div>
+                </div>
+                <div class="level-privileges">
+                    <h3>注册会员特权</h3>
+                    <p>基础用户，可浏览信息，参与平台活�?/p>
+                </div>
+            </div>
+            
+            <!-- 会员等级切换脚本 -->
+            <script type="text/javascript">
+                // 页面加载完成后立即执�?
+                window.onload = function() {
+                    // 会员等级数据
+                    var levels = [
+                        { name: '注册', desc: '基础用户，可浏览信息，参与平台活�? },
+                        { name: '青铜会员', desc: '享受9.5折优惠，可参与基础活动' },
+                        { name: '白银会员', desc: '享受9折优惠，专属客服，优先报名活�? },
+                        { name: '黄金会员', desc: '享受8.5折优惠，专属顾问，免费体验部分项�? },
+                        { name: '铂金会员', desc: '享受8折优惠，私人定制，免费参加所有活�? }
+                    ];
+                    
+                    // 获取所有DOM元素
+                    var levelCircles = document.querySelectorAll('.level-circle');
+                    var levelElements = document.querySelectorAll('.level');
+                    var privilegesDiv = document.querySelector('.level-privileges');
+                    
+                    // 更新特权信息的函�?
+                    function updatePrivileges(index) {
+                        // 移除所有active�?
+                        for (var j = 0; j < levelElements.length; j++) {
+                            levelElements[j].classList.remove('active');
+                        }
+                        // 添加当前active�?
+                        levelElements[index].classList.add('active');
+                        // 更新特权显示
+                        var level = levels[index];
+                        privilegesDiv.innerHTML = '<h3>' + level.name + '特权</h3><p>' + level.desc + '</p>';
+                    }
+                    
+                    // 为每个等级圆圈添加点击事�?
+                    for (var i = 0; i < levelCircles.length; i++) {
+                        // 设置鼠标样式
+                        levelCircles[i].style.cursor = 'pointer';
+                        levelElements[i].style.cursor = 'pointer';
+                        privilegesDiv.style.cursor = 'pointer';
+                        
+                        // 直接为圆圈添加点击事�?
+                        levelCircles[i].onclick = function() {
+                            // 获取当前圆圈的文本内容作为等级索�?
+                            var levelIndex = parseInt(this.textContent) - 1;
+                            updatePrivileges(levelIndex);
+                        };
+                        
+                        // 同时为整个等级元素添加点击事�?
+                        levelElements[i].onclick = function() {
+                            // 获取当前元素内的圆圈文本作为等级索引
+                            var circle = this.querySelector('.level-circle');
+                            var levelIndex = parseInt(circle.textContent) - 1;
+                            updatePrivileges(levelIndex);
+                        };
+                    }
+                    
+                    // 为特权区域添加点击事�?
+                    privilegesDiv.onclick = function() {
+                        // 找到当前激活的等级
+                        var currentIndex = 0;
+                        for (var i = 0; i < levelElements.length; i++) {
+                            if (levelElements[i].classList.contains('active')) {
+                                currentIndex = i;
+                                break;
+                            }
+                        }
+                        // 计算下一个等�?
+                        var nextIndex = (currentIndex + 1) % levelElements.length;
+                        updatePrivileges(nextIndex);
+                    };
+                };
+                
+                // 全局的changeLevel函数，用于直接通过onclick属性调�?
+                function changeLevel(index) {
+                    // 获取所有DOM元素
+                    var levelElements = document.querySelectorAll('.level');
+                    var privilegesDiv = document.querySelector('.level-privileges');
+                    
+                    // 会员等级数据
+                    var levels = [
+                        { name: '注册', desc: '基础用户，可浏览信息，参与平台活�? },
+                        { name: '青铜会员', desc: '享受9.5折优惠，可参与基础活动' },
+                        { name: '白银会员', desc: '享受9折优惠，专属客服，优先报名活�? },
+                        { name: '黄金会员', desc: '享受8.5折优惠，专属顾问，免费体验部分项�? },
+                        { name: '铂金会员', desc: '享受8折优惠，私人定制，免费参加所有活�? }
+                    ];
+                    
+                    // 更新特权信息
+                    for (var j = 0; j < levelElements.length; j++) {
+                        levelElements[j].classList.remove('active');
+                    }
+                    levelElements[index].classList.add('active');
+                    var level = levels[index];
+                    privilegesDiv.innerHTML = '<h3>' + level.name + '特权</h3><p>' + level.desc + '</p>';
+                }
+            </script>
+
+            <!-- 用户分享�?-->
+            <div class="user-shares">
+                <h2 class="section-title">旅友精彩分享</h2>
+                <div class="shares-grid">
+                    <div class="share-card">
+                        <img src=""C:\Users\lenovo\Desktop\秦岭\3.jpg.jpg alt="用户分享">
+                        <div class="share-content">
+                            <div class="C:\Users\lenovo\Desktop\秦岭\8.jpg.jpg">
+                                <img src="" alt="用户头像" class="user-avatar">
+                                <div>
+                                    <h4>远海慢慢</h4>
+                                    <p>2天前</p>
+                                </div>
+                            </div>
+                            <p>秦岭的云海真的太美了！感谢云栖平台的智能规划，让我找到了这么美的观景点�?/p>
+                        </div>
+                    </div>
+                    <div class="share-card">
+                        <img src="C:\Users\lenovo\Desktop\秦岭\4.jpg.jpg" alt="用户分享">
+                        <div class="share-content">
+                            <div class="user-info">
+                                <img src="C:\Users\lenovo\Desktop\秦岭\6.jpg.jpg" alt="用户头像" class="user-avatar">
+                                <div>
+                                    <h4>爱上徒步如呼吸一样简�?/h4>
+                                    <p>1周前</p>
+                                </div>
+                            </div>
+                            <p>跟着云栖平台的AI路线徒步，沿途的风景美不胜收，还认识了很多志同道合的朋友�?/p>
+                        </div>
+                    </div>
+                    <div class="share-card">
+                        <img src="C:\Users\lenovo\Desktop\秦岭\5.jpg.jpg" alt="用户分享">
+                        <div class="share-content">
+                            <div class="user-info">
+                                <img src="C:\Users\lenovo\Desktop\秦岭\7.jpg.jpg" alt="用户头像" class="user-avatar">
+                                <div>
+                                    <h4>唯美食不可辜�?/h4>
+                                    <p>2周前</p>
+                                </div>
+                            </div>
+                            <p>平台推荐的农家乐真的太好吃了！我爱吃，下次带朋友来�?/p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 活动日历 -->
+            <div class="activity-calendar">
+                <h2 class="section-title">近期活动</h2>
+                <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h3><i class="fas fa-calendar-alt"></i> 本周六：亲子徒步</h3>
+                        <p>地点：秦岭太平峪</p>
+                        <p>时间：上�?:00 - 下午4:00</p>
+                        <p>适合人群�?-12岁儿童及家长</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openRegistrationModal('本周六：亲子徒步', 1)">立即报名</button>
+                    </div>
+                    <div style="flex: 1; min-width: 250px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h3><i class="fas fa-calendar-alt"></i> 下月：星空摄影大�?/h3>
+                        <p>地点：秦岭光头山</p>
+                        <p>时间�?�?�?/p>
+                        <p>适合人群：摄影爱好�?/p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openRegistrationModal('下月：星空摄影大�?, 2)">立即报名</button>
+                    </div>
+                    <div style="flex: 1; min-width: 250px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                        <h3><i class="fas fa-calendar-alt"></i> 每周日：非遗体验</h3>
+                        <p>地点：秦岭民俗村</p>
+                        <p>时间：上�?0:00 - 下午5:00</p>
+                        <p>适合人群：所有游�?/p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openRegistrationModal('每周日：非遗体验', 3)">立即报名</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 报名表单模态框 -->
+    <div id="registration-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 id="modal-title">活动报名</h3>
+                <button id="close-modal" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            <form id="registration-form">
+                <input type="hidden" id="activity-id" name="activity-id">
+                <div style="margin-bottom: 15px;">
+                    <label for="name" style="display: block; margin-bottom: 5px; font-weight: bold;">姓名</label>
+                    <input type="text" id="name" name="name" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="phone" style="display: block; margin-bottom: 5px; font-weight: bold;">手机�?/label>
+                    <input type="tel" id="phone" name="phone" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="email" style="display: block; margin-bottom: 5px; font-weight: bold;">邮箱</label>
+                    <input type="email" id="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="people" style="display: block; margin-bottom: 5px; font-weight: bold;">报名人数</label>
+                    <select id="people" name="people" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;">
+                        <option value="1">1�?/option>
+                        <option value="2">2�?/option>
+                        <option value="3-4">3-4�?/option>
+                        <option value="5+">5人以�?/option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="remark" style="display: block; margin-bottom: 5px; font-weight: bold;">备注</label>
+                    <textarea id="remark" name="remark" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 16px;"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 16px;">提交报名</button>
+                    <button type="button" id="cancel-registration" class="btn btn-secondary" style="flex: 1; padding: 10px; font-size: 16px;">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市莲湖�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <script type="text/javascript">
+        // 打开报名模态框
+        function openRegistrationModal(activityName, activityId) {
+            const modal = document.getElementById('registration-modal');
+            const title = document.getElementById('modal-title');
+            const activityIdInput = document.getElementById('activity-id');
+            
+            if (modal && title && activityIdInput) {
+                // 设置活动标题和ID
+                title.textContent = activityName + ' - 报名';
+                activityIdInput.value = activityId;
+                
+                // 显示模态框
+                modal.style.display = 'flex';
+            }
+        }
+        
+        // 关闭报名模态框
+        function closeRegistrationModal() {
+            const modal = document.getElementById('registration-modal');
+            const form = document.getElementById('registration-form');
+            
+            if (modal) {
+                // 隐藏模态框
+                modal.style.display = 'none';
+                
+                // 重置表单
+                if (form) {
+                    form.reset();
+                }
+            }
+        }
+        
+        // 初始化模态框事件
+        document.addEventListener('DOMContentLoaded', function() {
+            // 关闭按钮事件
+            const closeBtn = document.getElementById('close-modal');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeRegistrationModal);
+            }
+            
+            // 取消按钮事件
+            const cancelBtn = document.getElementById('cancel-registration');
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', closeRegistrationModal);
+            }
+            
+            // 点击模态框外部关闭
+            const modal = document.getElementById('registration-modal');
+            if (modal) {
+                modal.addEventListener('click', function(e) {
+                    if (e.target === modal) {
+                        closeRegistrationModal();
+                    }
+                });
+            }
+            
+            // 表单提交事件
+            const form = document.getElementById('registration-form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // 获取表单数据
+                    const formData = new FormData(form);
+                    const activityId = formData.get('activity-id');
+                    const name = formData.get('name');
+                    const phone = formData.get('phone');
+                    const email = formData.get('email');
+                    const people = formData.get('people');
+                    const remark = formData.get('remark');
+                    
+                    // 模拟表单提交
+                    console.log('报名信息:', {
+                        activityId,
+                        name,
+                        phone,
+                        email,
+                        people,
+                        remark
+                    });
+                    
+                    // 显示成功提示
+                    alert('报名成功！我们会尽快与您联系�?);
+                    
+                    // 关闭模态框
+                    closeRegistrationModal();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

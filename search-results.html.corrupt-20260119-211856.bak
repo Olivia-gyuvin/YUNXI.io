@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果 - 秦岭旅友�?/title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 搜索结果页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .search-header {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        .search-query {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .search-count {
+            color: var(--community-text-secondary);
+            margin-bottom: 25px;
+        }
+        
+        .search-bar-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid var(--community-border);
+            border-radius: 25px;
+            font-size: 16px;
+        }
+        
+        .search-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            background-color: var(--community-bg);
+            padding: 5px;
+            border-radius: 25px;
+            max-width: fit-content;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            background-color: transparent;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: white;
+            color: var(--community-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-results {
+            margin-bottom: 30px;
+        }
+        
+        .result-section {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--community-border);
+        }
+        
+        .result-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--community-border);
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* 帖子结果样式 */
+        .post-result {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .post-result-content {
+            flex: 1;
+        }
+        
+        .post-result-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+            text-decoration: none;
+        }
+        
+        .post-result-title:hover {
+            color: var(--community-green);
+        }
+        
+        .post-result-preview {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .post-result-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-result-stats {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .post-result-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .post-result-images {
+            display: grid;
+            grid-template-columns: repeat(3, 80px);
+            gap: 8px;
+        }
+        
+        .post-result-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        /* 用户结果样式 */
+        .user-result {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-result-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        
+        .user-result-info {
+            flex: 1;
+        }
+        
+        .user-result-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .user-result-meta {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .user-result-stats {
+            display: flex;
+            gap: 15px;
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        /* 话题结果样式 */
+        .topic-result {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .topic-result-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .topic-result-tag {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .topic-result-description {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .topic-result-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 活动结果样式 */
+        .activity-result {
+            display: flex;
+            gap: 20px;
+            background-color: var(--community-bg);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .activity-result-content {
+            flex: 1;
+        }
+        
+        .activity-result-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 5px;
+        }
+        
+        .activity-result-meta {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            margin-bottom: 10px;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .activity-result-status {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .activity-result-status.ongoing {
+            background-color: rgba(58, 139, 95, 0.1);
+            color: var(--community-green);
+        }
+        
+        .activity-result-status.upcoming {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #FFC107;
+        }
+        
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--community-border);
+            background-color: white;
+            color: var(--community-text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--community-green);
+            color: var(--community-green);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+        
+        /* 页面头部 */
+        .page-header {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* 响应式设�?*/
+        @media (max-width: 768px) {
+            .search-bar-container {
+                flex-direction: column;
+            }
+            
+            .filter-tabs {
+                overflow-x: auto;
+                max-width: 100%;
+            }
+            
+            .post-result {
+                flex-direction: column;
+            }
+            
+            .post-result-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .post-result-image {
+                width: 100%;
+                height: 100px;
+            }
+            
+            .user-result {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .activity-result {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面头部 -->
+    <div class="page-header">
+        <a href="community.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            返回社区
+        </a>
+    </div>
+
+    <!-- 搜索结果内容 -->
+    <div class="container">
+        <!-- 搜索头部 -->
+        <div class="search-header">
+            <h1 class="search-query">搜索：太平峪</h1>
+            <div class="search-count">找到相关结果 127 �?/div>
+            
+            <div class="search-bar-container">
+                <input type="text" class="search-input" placeholder="🔍 搜索内容/用户" value="太平�?>
+                <button class="search-btn">搜索</button>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active">全部</button>
+                <button class="filter-tab">帖子</button>
+                <button class="filter-tab">用户</button>
+                <button class="filter-tab">话题</button>
+                <button class="filter-tab">活动</button>
+            </div>
+        </div>
+        
+        <!-- 搜索结果 -->
+        <div class="search-results">
+            <!-- 帖子结果 -->
+            <div class="result-section">
+                <h2 class="section-title">📝 帖子 (89)</h2>
+                
+                <div class="result-item">
+                    <div class="post-result">
+                        <div class="post-result-content">
+                            <a href="#" class="post-result-title">太平峪东线枫叶红了！最佳拍摄时间下�?-5�?/a>
+                            <div class="post-result-preview">太平峪东线的枫叶已经红了80%左右，是最佳观赏期。今天下午去拍了一些照片，分享给大�?.. <a href="#" style="color: var(--community-green);">查看全文</a></div>
+                            <div class="C:\Users\lenovo\Desktop\秦岭\9.jpg.jpg">
+                                <div>王摄影师 · 2小时�?/div>
+                                <div class="post-result-stats">
+                                    <div class="post-result-stat"><i class="fas fa-heart"></i> 245</div>
+                                    <div class="post-result-stat"><i class="fas fa-comment"></i> 32</div>
+                                    <div class="post-result-stat"><i class="fas fa-share"></i> 12</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-result-images">
+                            <img src="C:\Users\lenovo\Desktop\秦岭\a.jpg.jpg" alt="帖子图片" class="post-result-image">
+                            <img src="C:\Users\lenovo\Desktop\秦岭\b.jpg.jpg" alt="帖子图片" class="post-result-image">
+                            <img src="C:\Users\lenovo\Desktop\秦岭\c.jpg.jpg" alt="帖子图片" class="post-result-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="post-result">
+                        <div class="post-result-content">
+                            <a href="#" class="post-result-title">�?岁娃游太平峪攻略</a>
+                            <div class="post-result-preview">分享轻松路线、必备物�?.. <a href="#" style="color: var(--community-green);">展开全文</a></div>
+                            <div class="post-result-meta">
+                                <div>李妈妈亲子游 · 1天前</div>
+                                <div class="post-result-stats">
+                                    <div class="post-result-stat"><i class="fas fa-heart"></i> 189</div>
+                                    <div class="post-result-stat"><i class="fas fa-comment"></i> 45</div>
+                                    <div class="post-result-stat"><i class="fas fa-bookmark"></i> 67</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-result-images">
+                            <img src="C:\Users\lenovo\Desktop\秦岭\d.jpg.jpg"alt="帖子图片" class="post-result-image">
+                            <img src="C:\Users\lenovo\Desktop\秦岭\e.jpg.jpg" alt="帖子图片" class="post-result-image">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="post-result">
+                        <div class="post-result-content">
+                            <a href="#" class="post-result-title">请问太平峪现在门票多少钱�?/a>
+                            <div class="post-result-preview">打算周末去太平峪，请问现在门票多少钱？有优惠政策吗？</div>
+                            <div class="post-result-meta">
+                                <div>初遇徒步 · 3小时�?/div>
+                                <div class="post-result-stats">
+                                    <div class="post-result-stat"><i class="fas fa-heart"></i> 12</div>
+                                    <div class="post-result-stat"><i class="fas fa-comment"></i> 8</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 用户结果 -->
+            <div class="result-section">
+                <h2 class="section-title">👥 用户 (15)</h2>
+                
+                <div class="result-item">
+                    <div class="user-result">
+                        <img src="images/avatars/avatar-mkegcnm7gbs9-U.svg" alt="用户头像" class="user-result-avatar">
+                        <div class="user-result-info">
+                            <div class="user-result-name">太平峪向�?/div>
+                            <div class="user-result-meta">认证向导 | 专注太平峪地�?/div>
+                            <div class="user-result-stats">
+                                <span>帖子: 127</span>
+                                <span>粉丝: 890</span>
+                                <span>关注: 120</span>
+                            </div>
+                        </div>
+                        <button class="follow-btn">关注</button>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="user-result">
+                        <img src="images/avatars/avatar-mkegcnm7sznn-U.svg" alt="用户头像" class="user-result-avatar">
+                        <div class="user-result-info">
+                            <div class="user-result-name">太平峪农家乐</div>
+                            <div class="user-result-meta">认证商户 | 提供住宿餐饮</div>
+                            <div class="user-result-stats">
+                                <span>帖子: 45</span>
+                                <span>粉丝: 345</span>
+                                <span>关注: 56</span>
+                            </div>
+                        </div>
+                        <button class="follow-btn">关注</button>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="user-result">
+                        <img src="C:\Users\lenovo\Desktop\秦岭\10.jpg.jpg" alt="用户头像" class="user-result-avatar">
+                        <div class="user-result-info">
+                            <div class="user-result-name">太平峪摄影爱好�?/div>
+                            <div class="user-result-meta">摄影爱好�?| 常驻太平�?/div>
+                            <div class="user-result-stats">
+                                <span>帖子: 234</span>
+                                <span>粉丝: 1.2k</span>
+                                <span>关注: 89</span>
+                            </div>
+                        </div>
+                        <button class="follow-btn">关注</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 话题结果 -->
+            <div class="result-section">
+                <h2 class="section-title">🏷�?话题 (12)</h2>
+                
+                <div class="result-item">
+                    <div class="topic-result">
+                        <div class="topic-result-content">
+                            <div>
+                                <div class="topic-result-tag">#太平峪攻�?/div>
+                                <div class="topic-result-description">分享太平峪的旅游攻略、路线、美食等信息</div>
+                            </div>
+                        </div>
+                        <div class="topic-result-stats">
+                            <span>1.2k 帖子</span>
+                            <span>890 关注</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="topic-result">
+                        <div class="topic-result-content">
+                            <div>
+                                <div class="topic-result-tag">#太平峪摄�?/div>
+                                <div class="topic-result-description">分享在太平峪拍摄的美景照�?/div>
+                            </div>
+                        </div>
+                        <div class="topic-result-stats">
+                            <span>876 帖子</span>
+                            <span>650 关注</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="topic-result">
+                        <div class="topic-result-content">
+                            <div>
+                                <div class="topic-result-tag">#太平峪农家乐</div>
+                                <div class="topic-result-description">分享太平峪周边的农家乐信息和体验</div>
+                            </div>
+                        </div>
+                        <div class="topic-result-stats">
+                            <span>432 帖子</span>
+                            <span>340 关注</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 活动结果 -->
+            <div class="result-section">
+                <h2 class="section-title">🎉 活动 (11)</h2>
+                
+                <div class="result-item">
+                    <div class="activity-result">
+                        <div class="activity-result-content">
+                            <div class="activity-result-title">11�?0日太平峪徒步</div>
+                            <div class="activity-result-meta">
+                                <span><i class="fas fa-calendar-alt"></i> 2026-11-20</span>
+                                <span><i class="fas fa-clock"></i> 08:00 - 18:00</span>
+                                <span><i class="fas fa-map-marker-alt"></i> 太平峪景�?/span>
+                            </div>
+                            <div>周末登山�?· 已有3人报�?/div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+                            <span class="activity-result-status ongoing">报名�?/span>
+                            <button class="follow-btn" style="margin-top: 5px;">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="activity-result">
+                        <div class="activity-result-content">
+                            <div class="activity-result-title">太平峪枫叶摄影大�?/div>
+                            <div class="activity-result-meta">
+                                <span><i class="fas fa-calendar-alt"></i> 11�?5�?- 12�?5�?/span>
+                                <span><i class="fas fa-map-marker-alt"></i> 太平峪全景区</span>
+                            </div>
+                            <div>云栖平台 · 摄影爱好者交流活�?/div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+                            <span class="activity-result-status ongoing">进行�?/span>
+                            <button class="follow-btn" style="margin-top: 5px;">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="result-item">
+                    <div class="activity-result">
+                        <div class="activity-result-content">
+                            <div class="activity-result-title">太平峪亲子游活动</div>
+                            <div class="activity-result-meta">
+                                <span><i class="fas fa-calendar-alt"></i> 12�?�?/span>
+                                <span><i class="fas fa-clock"></i> 09:00 - 16:00</span>
+                                <span><i class="fas fa-map-marker-alt"></i> 太平峪自然教育基�?/span>
+                            </div>
+                            <div>李妈妈亲子游 · 适合2-6岁儿�?/div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; align-items: flex-end;">
+                            <span class="activity-result-status upcoming">即将开�?/span>
+                            <button class="follow-btn" style="margin-top: 5px;">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 分页 -->
+        <div class="pagination">
+            <button class="pagination-btn">上一�?/button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">4</button>
+            <button class="pagination-btn">5</button>
+            <button class="pagination-btn">...</button>
+            <button class="pagination-btn">13</button>
+            <button class="pagination-btn">下一�?/button>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市莲湖�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 筛选标签切�?
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active�?
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active�?
+                this.classList.add('active');
+                
+                // 模拟筛选结�?
+                const tabType = this.textContent;
+                console.log('切换�?, tabType, '结果');
+                
+                // 这里可以添加根据标签类型显示/隐藏不同结果区域的逻辑
+                const resultSections = document.querySelectorAll('.result-section');
+                resultSections.forEach(section => {
+                    if (tabType === '全部') {
+                        section.style.display = 'block';
+                    } else {
+                        const sectionTitle = section.querySelector('.section-title').textContent;
+                        switch(tabType) {
+                            case '帖子':
+                                section.style.display = sectionTitle.includes('帖子') ? 'block' : 'none';
+                                break;
+                            case '用户':
+                                section.style.display = sectionTitle.includes('用户') ? 'block' : 'none';
+                                break;
+                            case '话题':
+                                section.style.display = sectionTitle.includes('话题') ? 'block' : 'none';
+                                break;
+                            case '活动':
+                                section.style.display = sectionTitle.includes('活动') ? 'block' : 'none';
+                                break;
+                        }
+                    }
+                });
+            });
+        });
+        
+        // 搜索功能
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        function performSearch() {
+            const keyword = searchInput.value.trim();
+            if (keyword) {
+                console.log('搜索:', keyword);
+                // 这里可以添加搜索逻辑，比如跳转到新的搜索结果页面
+                alert(`搜索 "${keyword}"您没有访问权限`);
+            }
+        }
+        
+        // 点击搜索按钮
+        searchBtn.addEventListener('click', performSearch);
+        
+        // 按回车键搜索
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // 帖子结果交互
+        document.querySelectorAll('.post-result-title').forEach(title => {
+            title.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('您的等级尚未达到观看门槛');
+            });
+        });
+        
+        document.querySelectorAll('.post-result-preview a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('您的等级尚未达到观看门槛');
+            });
+        });
+        
+        // 用户结果交互 - 关注功能
+        document.querySelectorAll('.user-result .follow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent === '关注') {
+                    this.textContent = '已关�?;
+                    this.style.backgroundColor = '#2d6a4f';
+                    alert('关注用户成功�?);
+                } else {
+                    this.textContent = '关注';
+                    this.style.backgroundColor = 'var(--community-green)';
+                    alert('已取消关注用户！');
+                }
+            });
+        });
+        
+        // 话题结果交互
+        document.querySelectorAll('.topic-result').forEach(topic => {
+            topic.addEventListener('click', function() {
+                const topicTag = this.querySelector('.topic-result-tag').textContent;
+                console.log('点击话题:', topicTag);
+                alert(`查看话题 ${topicTag} 您的等级尚未达到门槛`);
+            });
+        });
+        
+        // 活动结果交互
+        document.querySelectorAll('.activity-result .follow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('您的等级尚未达到门槛');
+            });
+        });
+        
+        // 分页按钮点击事件
+        document.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (!this.textContent.includes('上一�?) && !this.textContent.includes('下一�?) && !this.textContent.includes('...')) {
+                    // 移除所有active�?
+                    document.querySelectorAll('.pagination-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加当前active�?
+                    this.classList.add('active');
+                    
+                    // 模拟分页加载
+                    console.log('切换到第', this.textContent, '�?);
+                } else if (this.textContent.includes('上一�?)) {
+                    console.log('上一�?);
+                } else if (this.textContent.includes('下一�?)) {
+                    console.log('下一�?);
+                }
+            });
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

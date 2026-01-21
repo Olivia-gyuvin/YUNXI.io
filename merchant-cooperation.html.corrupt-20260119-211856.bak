@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商户合作 - 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="merchant-cooperation">
+        <div class="container">
+            <h1 class="service-title">让您的服务，精准匹配对的�?/h1>
+            <p class="service-subtitle">与云栖平台共赢，开启智能旅游新时代</p>
+
+            <!-- 数据展示 -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">68%</div>
+                    <p>平台游客�?5-45�?/p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">85%</div>
+                    <p>游客消费能力�?/p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">32%</div>
+                    <p>游客复购�?/p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <p>合作商户数量</p>
+                </div>
+            </div>
+
+            <!-- 入驻步骤 -->
+            <div class="steps">
+                <h2 class="section-title">入驻步骤</h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h3>填写申请�?/h3>
+                        <p>提交基本信息和店铺资�?/p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h3>审核资料</h3>
+                        <p>我们将在3个工作日内完成审�?/p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h3>培训上线</h3>
+                        <p>参加平台培训，准备上�?/p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h3>开始赚�?/h3>
+                        <p>上线后即可接收订�?/p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成功案例 -->
+            <div class="success-case">
+                <div>
+                    <img src=""C:\Users\lenovo\Desktop\秦岭\2.jpg.jpg alt="合作民宿" class="case-image">
+                </div>
+                <div>
+                    <h2 class="section-title" style="text-align: left; margin-bottom: 30px;">成功案例</h2>
+                    <h3>立元松茶�?/h3>
+                    <p>入驻前：月入住率35%，主要依赖散�?/p>
+                    <p>入驻后：月入住率68%，平台带�?2%订单</p>
+                    <p>老板说："加入云栖平台后，我们的客源更稳定了，收入也翻了一番。平台的AI推荐功能非常厉害，能精准匹配客人需求�?</p>
+                </div>
+            </div>
+
+            <!-- 入驻申请表单 -->
+            <h2 class="section-title">立即申请入驻</h2>
+            <div class="form-grid" style="margin-top: 50px;">
+                <div class="form-column" style="grid-column: 1 / -1;">
+                    <h3>商户入驻申请�?/h3>
+                    <form>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                            <div class="form-group">
+                                <label for="shop-name">店铺名称</label>
+                                <input type="text" id="shop-name" name="shop-name" placeholder="请输入您的店铺名�?>
+                            </div>
+                            <div class="form-group">
+                                <label for="contact">联系�?/label>
+                                <input type="text" id="contact" name="contact" placeholder="请输入联系人姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">联系电话</label>
+                                <input type="tel" id="phone" name="phone" placeholder="请输入联系电�?>
+                            </div>
+                            <div class="form-group">
+                                <label for="shop-type">店铺类型</label>
+                                <select id="shop-type" name="shop-type">
+                                    <option value="homestay">民宿</option>
+                                    <option value="farmhouse">农家�?/option>
+                                    <option value="restaurant">餐厅</option>
+                                    <option value="attraction">景区</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">店铺位置</label>
+                                <input type="text" id="address" name="address" placeholder="请输入店铺详细地址">
+                            </div>
+                            <div class="form-group">
+                                <label for="capacity">接待能力</label>
+                                <input type="number" id="capacity" name="capacity" placeholder="请输入最大接待人�?>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="description">店铺简�?/label>
+                            <textarea id="description" name="description" placeholder="请简要描述您的店铺特色和服务"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="margin-top: 20px;">提交申请</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市莲湖�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

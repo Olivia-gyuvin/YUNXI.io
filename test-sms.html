@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证码功能测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+        h2 {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #3A8B5F;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #2d6a4f;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <h1>验证码功能测试</h1>
+    
+    <div class="test-section">
+        <h2>1. 测试发送验证码</h2>
+        <div>
+            <label for="test-phone">手机号：</label>
+            <input type="text" id="test-phone" placeholder="请输入手机号">
+        </div>
+        <button id="send-code-btn">发送验证码</button>
+        <div id="send-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. 测试验证验证码</h2>
+        <div>
+            <label for="verify-phone">手机号：</label>
+            <input type="text" id="verify-phone" placeholder="请输入手机号">
+        </div>
+        <div>
+            <label for="verify-code">验证码：</label>
+            <input type="text" id="verify-code" placeholder="请输入验证码">
+        </div>
+        <button id="verify-code-btn">验证验证码</button>
+        <div id="verify-result" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. 查看服务器日志</h2>
+        <p>请在终端中查看服务器输出，获取生成的验证码。</p>
+        <p>格式：向手机号 XXXXXXXXXX 发送验证码：XXXXXX</p>
+    </div>
+
+    <script>
+        // 发送验证码测试
+        document.getElementById('send-code-btn').addEventListener('click', async function() {
+            const phone = document.getElementById('test-phone').value;
+            const resultDiv = document.getElementById('send-result');
+            
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                resultDiv.textContent = '请输入正确的手机号';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/send-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.textContent = result.message;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = result.error;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent = '网络错误，请稍后重试';
+                resultDiv.className = 'result error';
+                console.error('发送验证码失败:', error);
+            }
+        });
+        
+        // 验证验证码测试
+        document.getElementById('verify-code-btn').addEventListener('click', async function() {
+            const phone = document.getElementById('verify-phone').value;
+            const code = document.getElementById('verify-code').value;
+            const resultDiv = document.getElementById('verify-result');
+            
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                resultDiv.textContent = '请输入正确的手机号';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            if (!/^\d{6}$/.test(code)) {
+                resultDiv.textContent = '请输入6位数字验证码';
+                resultDiv.className = 'result error';
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/verify-code', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ phone, code })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.textContent = result.message;
+                    resultDiv.className = 'result success';
+                } else {
+                    resultDiv.textContent = result.error;
+                    resultDiv.className = 'result error';
+                }
+            } catch (error) {
+                resultDiv.textContent = '网络错误，请稍后重试';
+                resultDiv.className = 'result error';
+                console.error('验证验证码失败:', error);
+            }
+        });
+    </script>
+</body>
+</html>

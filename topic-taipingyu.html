@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#太平峪攻略 - 秦岭旅友圈</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 话题页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .topic-header {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        .topic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .topic-title-section {
+            flex: 1;
+        }
+        
+        .topic-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .topic-description {
+            font-size: 16px;
+            color: var(--community-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .topic-stats {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .topic-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .topic-action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .post-btn {
+            background-color: var(--community-bg);
+            color: var(--community-text-primary);
+            border: 1px solid var(--community-border);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: var(--community-border);
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 3;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            background-color: var(--community-bg);
+            padding: 5px;
+            border-radius: 25px;
+            max-width: fit-content;
+            margin: 20px;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            background-color: transparent;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: white;
+            color: var(--community-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .posts-list {
+            padding: 0 20px 20px;
+        }
+        
+        .post-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--community-border);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .post-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-stat:hover {
+            color: var(--community-green);
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--community-border);
+        }
+        
+        /* 相关话题 */
+        .related-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .related-topic-item {
+            margin-bottom: 12px;
+        }
+        
+        .related-topic-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .related-topic-link:hover {
+            color: var(--community-green);
+        }
+        
+        .related-topic-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 活跃用户 */
+        .active-users {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .active-user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .active-user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .active-user-info {
+            flex: 1;
+        }
+        
+        .active-user-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .active-user-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--community-border);
+            background-color: white;
+            color: var(--community-text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--community-green);
+            color: var(--community-green);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+            
+            .topic-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .topic-action-buttons {
+                width: 100%;
+            }
+            
+            .follow-btn,
+            .post-btn {
+                flex: 1;
+            }
+            
+            .topic-stats {
+                gap: 20px;
+            }
+            
+            .post-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .post-image {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 话题页面内容 -->
+    <div class="container">
+        <!-- 话题头部 -->
+        <div class="topic-header">
+            <a href="community.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                返回社区
+            </a>
+            
+            <div class="topic-info">
+                <div class="topic-title-section">
+                    <h1 class="topic-title">#太平峪攻略</h1>
+                    <p class="topic-description">分享太平峪的旅游攻略、路线规划、美食推荐、住宿信息等，帮助大家更好地探索太平峪的美景。</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-file-alt"></i>
+                            <span>1.2k 帖子</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-users"></i>
+                            <span>890 关注者</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-clock"></i>
+                            <span>最近更新: 2小时前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-action-buttons">
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i> 关注话题
+                    </button>
+                    <button class="post-btn">
+                        <i class="fas fa-edit"></i> 发布帖子
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content-container">
+            <!-- 主内容区 -->
+            <div class="main-content">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">热门</button>
+                    <button class="filter-tab">最新</button>
+                    <button class="filter-tab">精华</button>
+                    <button class="filter-tab">关注</button>
+                </div>
+                
+                <div class="posts-list">
+                    <!-- 帖子1 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user11.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">王摄影师</div>
+                                <div class="post-meta">
+                                    <span>2小时前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#太平峪攻略 #摄影</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                太平峪东线枫叶红了！最佳拍摄时间下午3-5点。<br>
+                                路线：景区入口 → 彩虹瀑布 → 一线天 → 原始森林<br>
+                                建议：穿舒适的鞋子，带足水和食物，摄影爱好者记得带长焦镜头。
+                            </div>
+                            <div class="post-images">
+                                <img src="images/autumn-1.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-7.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-8.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>245</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>32</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>12</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子2 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user12.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">李妈妈亲子游</div>
+                                <div class="post-meta">
+                                    <span>1天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#太平峪攻略 #亲子游</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                带3岁娃游太平峪的超详细攻略！<br>
+                                <br>
+                                🔹 路线选择：西线（平缓，适合小朋友）<br>
+                                🔹 必备物品：儿童推车、防晒帽、水壶、零食<br>
+                                🔹 餐饮推荐：山脚下的农家乐，有专门的儿童餐<br>
+                                🔹 卫生间：沿途有多个干净的卫生间<br>
+                                <br>
+                                全程步行约3公里，耗时3-4小时，小朋友玩得很开心！
+                            </div>
+                            <div class="post-images">
+                                <img src="images/autumn-3.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-9.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>189</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>45</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>67</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子3 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user1.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">太平峪向导</div>
+                                <div class="post-meta">
+                                    <span>3天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#太平峪攻略 #门票</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                2026年太平峪最新门票信息：<br>
+                                <br>
+                                💰 成人票：65元/人<br>
+                                👶 儿童票：35元/人（1.2-1.5米）<br>
+                                🧓 老人票：35元/人（60-65岁）<br>
+                                🆓 免票：1.2米以下儿童、65岁以上老人、军人、残疾人
+                                <br>
+                                ⏰ 开放时间：7:30 - 18:00
+                                📌 建议：网上提前购票，可享受优惠
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>156</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>28</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>42</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子4 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user2.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">农家乐老板</div>
+                                <div class="post-meta">
+                                    <span>5天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#太平峪攻略 #美食</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                推荐几家太平峪值得一吃的农家乐：<br>
+                                <br>
+                                1. 山脚下的「老李家农家乐」- 特色：土鸡炖蘑菇、锅盔夹辣子<br>
+                                2. 半山腰的「山涧人家」- 特色：冷水鱼、野菜拼盘<br>
+                                3. 景区内的「森林餐厅」- 特色：竹筒饭、野蜂蜜水
+                                <br>
+                                建议：周末提前预订，人比较多
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>123</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>36</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>54</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination">
+                    <button class="pagination-btn">上一页</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn">下一页</button>
+                </div>
+            </div>
+            
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <!-- 相关话题 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">相关话题</h3>
+                    <ul class="related-topics">
+                        <li class="related-topic-item">
+                            <a href="topic-autumn-photo.html" class="related-topic-link">
+                                <span>#秦岭秋色摄影</span>
+                                <span class="related-topic-posts">876 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-family-hiking.html" class="related-topic-link">
+                                <span>#亲子徒步推荐</span>
+                                <span class="related-topic-posts">654 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-farm-food.html" class="related-topic-link">
+                                <span>#农家乐美食</span>
+                                <span class="related-topic-posts">432 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-intangible-culture.html" class="related-topic-link">
+                                <span>#非遗体验分享</span>
+                                <span class="related-topic-posts">321 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-eco-protection.html" class="related-topic-link">
+                                <span>#生态保护行动</span>
+                                <span class="related-topic-posts">289 帖子</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 活跃用户 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题活跃用户</h3>
+                    <ul class="active-users">
+                        <li class="active-user-item">
+                            <img src="images/user1.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">太平峪向导</div>
+                                <div class="active-user-posts">24 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user11.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">王摄影师</div>
+                                <div class="active-user-posts">18 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user12.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">李妈妈亲子游</div>
+                                <div class="active-user-posts">15 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user2.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">农家乐老板</div>
+                                <div class="active-user-posts">12 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user13.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">新手徒步者</div>
+                                <div class="active-user-posts">9 帖子</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 话题规则 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题规则</h3>
+                    <ul style="font-size: 14px; color: var(--community-text-secondary); line-height: 1.6; padding-left: 20px;">
+                        <li>1. 请发布与太平峪相关的内容</li>
+                        <li>2. 分享真实的攻略和体验</li>
+                        <li>3. 尊重他人，友善交流</li>
+                        <li>4. 禁止发布广告和违法内容</li>
+                        <li>5. 鼓励分享优质原创内容</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 筛选标签切换
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active类
+                this.classList.add('active');
+                
+                // 模拟筛选结果
+                alert(`切换到${this.textContent}帖子功能开发中...`);
+            });
+        });
+        
+        // 分页功能实现
+        const posts = document.querySelector('.posts-list');
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        // 不同页码的评论数据
+        const pageData = {
+            1: `
+                <!-- 帖子1 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user11.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">王摄影师</div>
+                            <div class="post-meta">
+                                <span>2小时前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #摄影</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪东线枫叶红了！最佳拍摄时间下午3-5点。<br>
+                            路线：景区入口 → 彩虹瀑布 → 一线天 → 原始森林<br>
+                            建议：穿舒适的鞋子，带足水和食物，摄影爱好者记得带长焦镜头。
+                        </div>
+                        <div class="post-images">
+                            <img src="images/autumn-1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-2.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-3.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>245</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>32</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>12</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子2 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user12.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">李妈妈亲子游</div>
+                            <div class="post-meta">
+                                <span>1天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #亲子游</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            带3岁娃游太平峪的超详细攻略！<br>
+                            <br>
+                            🔹 路线选择：西线（平缓，适合小朋友）<br>
+                            🔹 必备物品：儿童推车、防晒帽、水壶、零食<br>
+                            🔹 餐饮推荐：山脚下的农家乐，有专门的儿童餐<br>
+                            🔹 卫生间：沿途有多个干净的卫生间<br>
+                            <br>
+                            全程步行约3公里，耗时3-4小时，小朋友玩得很开心！
+                        </div>
+                        <div class="post-images">
+                            <img src="images/tu1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/pashan.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>189</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>45</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>67</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            2: `
+                <!-- 帖子3 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user1.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">太平峪向导</div>
+                            <div class="post-meta">
+                                <span>3天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #门票</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            2026年太平峪最新门票信息：<br>
+                            <br>
+                            💰 成人票：65元/人<br>
+                            👶 儿童票：35元/人（1.2-1.5米）<br>
+                            🧓 老人票：35元/人（60-65岁）<br>
+                            🆓 免票：1.2米以下儿童、65岁以上老人、军人、残疾人
+                            <br>
+                            ⏰ 开放时间：7:30 - 18:00
+                            📌 建议：网上提前购票，可享受优惠
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>156</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>28</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子4 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user2.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">农家乐老板</div>
+                            <div class="post-meta">
+                                <span>5天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #美食</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            推荐几家太平峪值得一吃的农家乐：<br>
+                            <br>
+                            1. 山脚下的「老李家农家乐」- 特色：土鸡炖蘑菇、锅盔夹辣子<br>
+                            2. 半山腰的「山涧人家」- 特色：冷水鱼、野菜拼盘<br>
+                            3. 景区内的「森林餐厅」- 特色：竹筒饭、野蜂蜜水
+                            <br>
+                            建议：周末提前预订，人比较多
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>123</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>36</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>54</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            3: `
+                <!-- 帖子5 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user16.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">徒步爱好者</div>
+                            <div class="post-meta">
+                                <span>1周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #徒步</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪最佳徒步路线推荐：<br>
+                            <br>
+                            🥾 东线：适合摄影爱好者，沿途枫叶林很美<br>
+                            🌲 西线：适合家庭和新手，路线平缓<br>
+                            ⛰️ 中线：适合有经验的徒步者，挑战性大
+                            <br>
+                            建议根据自己的体力和兴趣选择合适的路线
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>98</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>24</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>41</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子6 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user17.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">露营爱好者</div>
+                            <div class="post-meta">
+                                <span>10天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #露营</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪露营攻略来啦！<br>
+                            <br>
+                            📍 推荐露营地点：<br>
+                            1. 太平峪森林公园内的指定露营区<br>
+                            2. 山脚下的「星空营地」<br>
+                            <br>
+                            🏕️ 必备装备：<br>
+                            - 帐篷、睡袋、防潮垫<br>
+                            - 头灯、充电宝<br>
+                            - 保暖衣物、雨具<br>
+                            - 食物、水、炉具
+                            <br>
+                            ⚠️ 注意事项：<br>
+                            - 遵守营地规定，不要随意生火<br>
+                            - 带走所有垃圾，保护环境<br>
+                            - 注意安全，远离危险区域
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>134</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>31</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>56</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            4: `
+                <!-- 帖子7 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user18.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">自驾游爱好者</div>
+                            <div class="post-meta">
+                                <span>2周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #自驾游</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪自驾游攻略：<br>
+                            <br>
+                            🚗 交通路线：<br>
+                            - 西安市区 → 西沣路 → 沣峪口转盘 → 太平峪方向<br>
+                            - 全程约1小时车程
+                            <br>
+                            🅿️ 停车：<br>
+                            - 景区入口有大型停车场，收费10元/车<br>
+                            - 沿途也有多个农家乐停车场，部分免费
+                            <br>
+                            💡 小贴士：<br>
+                            - 周末和节假日容易堵车，建议早出发
+                            - 山路弯曲，驾驶时注意安全
+                            - 导航建议使用高德地图，实时更新路况
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>112</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>26</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>49</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            5: `
+                <!-- 帖子8 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user19.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">历史爱好者</div>
+                            <div class="post-meta">
+                                <span>3周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#太平峪攻略 #历史文化</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪的历史文化景点推荐：<br>
+                            <br>
+                            📜 1. 草堂寺：西安最古老的寺庙之一，佛教三论宗祖庭<br>
+                            📜 2. 圭峰山：道教名山，有「终南第一峰」之称<br>
+                            📜 3. 紫阁峪：唐代诗人贾岛隐居地，文化底蕴深厚
+                            <br>
+                            建议：在欣赏自然风光的同时，也可以了解一下太平峪的历史文化
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>87</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>19</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>38</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+        
+        // 切换页码函数
+        function switchPage(pageNum) {
+            if (pageData[pageNum]) {
+                posts.innerHTML = pageData[pageNum];
+                
+                // 重新绑定事件
+                bindPostEvents();
+            } else {
+                // 当页码不存在时，显示友好提示或跳转到最后一页
+                alert(`第 ${pageNum} 页暂无内容，已跳转到最后一页`);
+                const lastPage = Object.keys(pageData).length;
+                if (lastPage > 0) {
+                    switchPage(lastPage);
+                    // 更新active状态
+                    paginationBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // 找到对应页码按钮并添加active类
+                    paginationBtns.forEach(btn => {
+                        if (parseInt(btn.textContent) === lastPage) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            }
+        }
+        
+        // 绑定帖子交互事件
+        function bindPostEvents() {
+            document.querySelectorAll('.post-stat').forEach(stat => {
+                stat.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const span = this.querySelector('span');
+                    
+                    if (icon.classList.contains('fa-heart')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    } else if (icon.classList.contains('fa-comment')) {
+                        alert('评论功能开发中...');
+                    } else if (icon.classList.contains('fa-share')) {
+                        alert('分享功能开发中...');
+                    } else if (icon.classList.contains('fa-bookmark')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    }
+                });
+            });
+        }
+        
+        // 分页按钮点击事件
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pageNum = parseInt(this.textContent);
+                
+                if (!isNaN(pageNum)) {
+                    // 移除所有active类
+                    paginationBtns.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加当前active类
+                    this.classList.add('active');
+                    
+                    // 切换页面内容
+                    switchPage(pageNum);
+                } else if (this.textContent.includes('上一页')) {
+                    // 上一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    if (currentPage > 1) {
+                        const prevPage = currentPage - 1;
+                        // 找到上一页按钮并点击
+                        paginationBtns.forEach(b => {
+                            if (parseInt(b.textContent) === prevPage) {
+                                b.click();
+                            }
+                        });
+                    }
+                } else if (this.textContent.includes('下一页')) {
+                    // 下一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    const nextPage = currentPage + 1;
+                    // 找到下一页按钮并点击
+                    paginationBtns.forEach(b => {
+                        if (parseInt(b.textContent) === nextPage) {
+                            b.click();
+                        }
+                    });
+                }
+            });
+        });
+        
+        // 初始化页面
+        bindPostEvents();
+        
+        // 关注话题功能
+        document.querySelector('.follow-btn').addEventListener('click', function() {
+            if (this.innerHTML.includes('关注话题')) {
+                this.innerHTML = '<i class="fas fa-check"></i> 已关注';
+                this.style.backgroundColor = '#2d6a4f';
+                alert('关注话题成功！');
+            } else {
+                this.innerHTML = '<i class="fas fa-plus"></i> 关注话题';
+                this.style.backgroundColor = 'var(--community-green)';
+                alert('已取消关注话题！');
+            }
+        });
+        
+        // 发布帖子功能
+        document.querySelector('.post-btn').addEventListener('click', function() {
+            alert('发布帖子功能开发中...');
+        });
+        
+        // 帖子交互功能
+        document.querySelectorAll('.post-stat').forEach(stat => {
+            stat.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+                
+                if (icon.classList.contains('fa-heart')) {
+                    // 点赞功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                } else if (icon.classList.contains('fa-comment')) {
+                    // 评论功能
+                    alert('评论功能开发中...');
+                } else if (icon.classList.contains('fa-share')) {
+                    // 分享功能
+                    alert('分享功能开发中...');
+                } else if (icon.classList.contains('fa-bookmark')) {
+                    // 收藏功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                }
+            });
+        });
+        
+        // 活跃用户交互
+        document.querySelectorAll('.active-user-item').forEach(user => {
+            user.addEventListener('click', function() {
+                const userName = this.querySelector('.active-user-name').textContent;
+                alert(`查看用户 ${userName} 详情功能开发中...`);
+            });
+        });
+        
+        // 相关话题交互
+        document.querySelectorAll('.related-topic-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 链接已经有href属性，这里可以添加额外的交互效果
+                console.log('点击相关话题:', this.textContent);
+            });
+        });
+        
+        // 帖子点击查看详情
+        document.querySelectorAll('.post-item').forEach(post => {
+            post.addEventListener('click', function(e) {
+                // 如果点击的是交互按钮，不触发查看详情
+                if (!e.target.closest('.post-stat')) {
+                    alert('查看帖子详情功能开发中...');
+                }
+            });
+        });
+    </script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>

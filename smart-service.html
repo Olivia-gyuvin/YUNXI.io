@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能服务 - 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <section class="smart-service">
+        <div class="container">
+            <h1 class="service-title">AI如何改变您的旅行</h1>
+            <p class="service-subtitle">智能技术赋能，让秦岭之旅更加便捷、个性化</p>
+
+            <!-- 智能规划演示器 -->
+            <div class="ai-demo">
+                <h2 class="section-title">智能规划演示</h2>
+                <div class="demo-steps">
+                    <div class="demo-step">
+                        <h4>第一步：选择兴趣标签</h4>
+                        <div class="tags">
+                            <span class="tag">自然风光</span>
+                            <span class="tag">亲子家庭</span>
+                            <span class="tag">徒步摄影</span>
+                            <span class="tag">非遗文化</span>
+                            <span class="tag">美食探索</span>
+                            <span class="tag">休闲度假</span>
+                        </div>
+                    </div>
+                    <div class="demo-step">
+                        <h4>第二步：选择旅行条件</h4>
+                        <div class="form-group">
+                            <label for="duration">旅行时长</label>
+                            <select id="duration">
+                                <option value="1">1天</option>
+                                <option value="2">2天1晚</option>
+                                <option value="3" selected>3天2晚</option>
+                                <option value="4">4天3晚</option>
+                                <option value="5+">5天以上</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="people">出行人数</label>
+                            <select id="people">
+                                <option value="1">1人</option>
+                                <option value="2" selected>2人</option>
+                                <option value="3-4">3-4人</option>
+                                <option value="5+">5人以上</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="demo-step">
+                        <h4>第三步：生成行程</h4>
+                        <button id="generate-plan" class="btn btn-primary" style="width: 100%; margin-top: 20px;">生成行程</button>
+                    </div>
+                </div>
+                <div class="demo-result" style="display: none;">
+                <h4>生成的行程规划：</h4>
+                <div class="itinerary-day">
+                    <h5><strong>D1：</strong>初见秦岭 · 山乡人家</h5>
+                    <div class="itinerary-details">
+                        <p><i class="fas fa-clock"></i> 上午：抵达秦岭脚下，呼吸山间清新空气</p>
+                        <p><i class="fas fa-leaf"></i> 中午：品尝地道秦岭农家菜，感受山野风味</p>
+                        <p><i class="fas fa-home"></i> 下午：入住特色农家乐，木质小屋依山傍水，推窗见山</p>
+                        <p><i class="fas fa-sun"></i> 傍晚：漫步山间小径，看夕阳染红天际，听溪流潺潺</p>
+                        <p><i class="fas fa-moon"></i> 夜晚：围坐篝火旁，听当地老人讲述秦岭传说</p>
+                    </div>
+                </div>
+                <div class="itinerary-day">
+                    <h5><strong>D2：</strong>山水之约 · 文化之旅</h5>
+                    <div class="itinerary-details">
+                        <p><i class="fas fa-mountain"></i> 上午：徒步穿越秦岭核心山脉，沿途欣赏原始森林、奇松怪石</p>
+                        <p><i class="fas fa-camera"></i> 中午：在山巅观景台野餐，俯瞰云海缭绕的壮丽景色</p>
+                        <p><i class="fas fa-hands"></i> 下午：探访非遗文化村落，体验传统手工制作，如竹编、剪纸</p>
+                        <p><i class="fas fa-utensils"></i> 晚上：品尝非遗美食，如秦岭杂酱面、野菜包子</p>
+                    </div>
+                </div>
+                <div class="itinerary-day">
+                    <h5><strong>D3：</strong>自然探秘 · 满载而归</h5>
+                    <div class="itinerary-details">
+                        <p><i class="fas fa-landmark"></i> 上午：参观秦岭自然博物馆，了解秦岭的地质变迁、生物多样性</p>
+                        <p><i class="fas fa-book"></i> 中午：在博物馆餐厅享用科普主题午餐，边吃边学</p>
+                        <p><i class="fas fa-shopping-bag"></i> 下午：选购当地特色纪念品，如野生蜂蜜、山核桃</p>
+                        <p><i class="fas fa-car"></i> 傍晚：返程，带着对秦岭的美好记忆，期待下次重逢</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 功能列表区 -->
+            <h2 class="section-title">核心智能功能</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                        <i class="fas fa-mountain"></i>
+                    </div>
+                    <h3>离线智能导览</h3>
+                    <p>没网也能听讲解、看地图，让您的秦岭之旅不再迷路</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI旅行管家</h3>
+                    <p>24小时在线，随时为您解答疑问，提供个性化建议</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>安全生态监测</h3>
+                    <p>实时监测客流情况，提供安全预警，可举报不文明行为</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-camera"></i>
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3>AR文化体验</h3>
+                    <p>用手机扫景点，看历史故事"活"起来，沉浸式了解秦岭文化</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

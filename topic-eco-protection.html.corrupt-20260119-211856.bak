@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#生态保护行�?- 秦岭旅友�?/title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 话题页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .topic-header {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        .topic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .topic-title-section {
+            flex: 1;
+        }
+        
+        .topic-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .topic-description {
+            font-size: 16px;
+            color: var(--community-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .topic-stats {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .topic-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .topic-action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .post-btn {
+            background-color: var(--community-bg);
+            color: var(--community-text-primary);
+            border: 1px solid var(--community-border);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: var(--community-border);
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 3;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            background-color: var(--community-bg);
+            padding: 5px;
+            border-radius: 25px;
+            max-width: fit-content;
+            margin: 20px;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            background-color: transparent;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: white;
+            color: var(--community-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .posts-list {
+            padding: 0 20px 20px;
+        }
+        
+        .post-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--community-border);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .post-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-stat:hover {
+            color: var(--community-green);
+        }
+        
+        /* 侧边�?*/
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--community-border);
+        }
+        
+        /* 相关话题 */
+        .related-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .related-topic-item {
+            margin-bottom: 12px;
+        }
+        
+        .related-topic-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .related-topic-link:hover {
+            color: var(--community-green);
+        }
+        
+        .related-topic-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 活跃用户 */
+        .active-users {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .active-user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .active-user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .active-user-info {
+            flex: 1;
+        }
+        
+        .active-user-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .active-user-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--community-border);
+            background-color: white;
+            color: var(--community-text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--community-green);
+            color: var(--community-green);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+        
+        /* 响应式设�?*/
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+            
+            .topic-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .topic-action-buttons {
+                width: 100%;
+            }
+            
+            .follow-btn,
+            .post-btn {
+                flex: 1;
+            }
+            
+            .topic-stats {
+                gap: 20px;
+            }
+            
+            .post-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .post-image {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 话题页面内容 -->
+    <div class="container">
+        <!-- 话题头部 -->
+        <div class="topic-header">
+            <a href="community.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                返回社区
+            </a>
+            
+            <div class="topic-info">
+                <div class="topic-title-section">
+                    <h1 class="topic-title">#生态保护行�?/h1>
+                    <p class="topic-description">分享秦岭生态保护的最新动态、环保活动、志愿者招募、保护知识等，号召大家一起参与秦岭生态保护，共同守护我们的绿色家园�?/p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-file-alt"></i>
+                            <span>289 帖子</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-users"></i>
+                            <span>678 关注�?/span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-clock"></i>
+                            <span>最近更�? 2天前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-action-buttons">
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i> 关注话题
+                    </button>
+                    <button class="post-btn">
+                        <i class="fas fa-edit"></i> 发布帖子
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content-container">
+            <!-- 主内容区 -->
+            <div class="main-content">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">热门</button>
+                    <button class="filter-tab">最�?/button>
+                    <button class="filter-tab">精华</button>
+                    <button class="filter-tab">关注</button>
+                </div>
+                
+                <div class="posts-list">
+                    <!-- 帖子1 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/avatars/avatar-mkegcnmi5np4-�?svg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">环保志愿�?/div>
+                                <div class="post-meta">
+                                    <span>2天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#生态保护行�?#志愿者招�?/span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                📢 【志愿者招募】秦岭环保清理活动开始报名啦�?br>
+                                <br>
+                                📅 活动时间�?026�?�?0日（周六�?9:00-16:00<br>
+                                📍 活动地点：太平峪景区<br>
+                                🎯 活动内容：清理景区垃圾，宣传环保知识<br>
+                                👥 招募人数�?0�?br>
+                                💰 费用：免费（提供午餐和饮用水�?br>
+                                🎁 福利：环保志愿者证书，纪念T�?br>
+                                <br>
+                                报名方式：评论区留言或私信我<br>
+                                <br>
+                                让我们一起为秦岭的生态保护贡献一份力量！💪
+                            </div>
+                            <div class="post-images">
+                                <img src="images/avatars/avatar-mkeg7soavwxvuc.svg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-12.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>321</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>89</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>123</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子2 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/avatars/avatar-mkegcnmjbxge-�?svg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">生态专�?/div>
+                                <div class="post-meta">
+                                    <span>5天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#生态保护行�?#保护知识</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                秦岭生态保护小知识：如何正确徒步减少对环境的影�?br>
+                                <br>
+                                🌿 1. 走步道：始终在指定步道上行走，避免踩踏植�?br>
+                                🌿 2. 带走垃圾：随身带走所有垃圾，包括果皮、纸巾等
+                                🌿 3. 不采摘植物：保护野生动植物，不采摘、不捕捉
+                                🌿 4. 控制噪音：保持安静，不影响野生动�?                                🌿 5. 合理使用资源：节约用水，减少一次性用品使�?                                🌿 6. 不留下痕迹：除了脚印，什么都不留下；除了照片，什么都不带�?                                <br>
+                                让我们一起做负责任的户外爱好者，保护秦岭的生态环境！
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>256</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>67</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>98</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子3 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/avatars/avatar-mkegcnmkf6ac-�?svg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">景区管理�?/div>
+                                <div class="post-meta">
+                                    <span>1周前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#生态保护行�?#最新动�?/span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                【景区动态】秦岭国家森林公园新增多处生态监测点<br>
+                                <br>
+                                为了更好地保护秦岭的生态环境，我们在景区内新增�?0处生态监测点，主要监测：
+                                <br>
+                                📊 空气质量
+                                💧 水质情况
+                                🐾 野生动物活动
+                                🌳 植被生长状况
+                                🌡�?气候数�?                                <br>
+                                这些监测点将为我们提供实时的生态数据，帮助我们更好地制定保护措施。同时，我们也欢迎游客朋友们积极参与到生态保护中来，一起守护我们的绿色家园�?                            </div>
+                            <div class="post-images">
+                                <img src="images/avatars/avatar-mkeg7sob5pm0h3.svg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-13.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-14.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>198</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>45</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>76</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子4 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/avatars/avatar-mkegcnmka3c9-�?svg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">环保达人</div>
+                                <div class="post-meta">
+                                    <span>2周前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#生态保护行�?#环保生活</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                分享几个日常环保小习惯，从身边做起保护秦岭：<br>
+                                <br>
+                                1. 🚶 绿色出行：尽量选择公共交通或徒步、骑行前往景区
+                                2. 🔄 减少一次性用品：自带水杯、餐具、环保袋
+                                3. 📱 电子门票：使用电子门票，减少纸张浪费
+                                4. 🌱 支持环保产品：购买环保认证的产品
+                                5. 🗣�?宣传环保：向身边的人宣传环保知识
+                                6. 📢 监督举报：发现破坏环境的行为及时举报
+                                <br>
+                                保护秦岭，从我做起，从小事做起！
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>167</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>34</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>56</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination">
+                    <button class="pagination-btn">上一�?/button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn">下一�?/button>
+                </div>
+            </div>
+            
+            <!-- 侧边�?-->
+            <div class="sidebar">
+                <!-- 相关话题 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">相关话题</h3>
+                    <ul class="related-topics">
+                        <li class="related-topic-item">
+                            <a href="topic-taipingyu.html" class="related-topic-link">
+                                <span>#太平峪攻�?/span>
+                                <span class="related-topic-posts">1.2k 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-autumn-photo.html" class="related-topic-link">
+                                <span>#秦岭秋色摄影</span>
+                                <span class="related-topic-posts">876 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-family-hiking.html" class="related-topic-link">
+                                <span>#亲子徒步推荐</span>
+                                <span class="related-topic-posts">654 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-farm-food.html" class="related-topic-link">
+                                <span>#农家乐美�?/span>
+                                <span class="related-topic-posts">432 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-intangible-culture.html" class="related-topic-link">
+                                <span>#非遗体验分享</span>
+                                <span class="related-topic-posts">321 帖子</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 活跃用户 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题活跃用户</h3>
+                    <ul class="active-users">
+                        <li class="active-user-item">
+                            <img src="images/avatars/avatar-mkegcnmkx9bu-U.svg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">环保志愿�?/div>
+                                <div class="active-user-posts">22 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/avatars/avatar-mkegcnmlezd1-U.svg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">生态专�?/div>
+                                <div class="active-user-posts">18 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/avatars/avatar-mkegcnml6ttg-U.svg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">景区管理�?/div>
+                                <div class="active-user-posts">15 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/avatars/avatar-mkegcnmmcd42-U.svg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">环保达人</div>
+                                <div class="active-user-posts">12 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/avatars/avatar-mkegcnmns7wy-U.svg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">自然爱好�?/div>
+                                <div class="active-user-posts">10 帖子</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 话题规则 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题规则</h3>
+                    <ul style="font-size: 14px; color: var(--community-text-secondary); line-height: 1.6; padding-left: 20px;">
+                        <li>1. 请发布与生态保护相关的内容</li>
+                        <li>2. 分享真实的环保活动和经验</li>
+                        <li>3. 尊重科学，传播正确的环保知识</li>
+                        <li>4. 禁止发布虚假信息和违法内�?/li>
+                        <li>5. 鼓励积极的环保行动和建议</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 筛选标签切�?        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active�?                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active�?                this.classList.add('active');
+                
+                // 模拟筛选结�?                alert(`切换�?{this.textContent}帖子功能开发中...`);
+            });
+        });
+        
+        // 分页功能实现
+        const posts = document.querySelector('.posts-list');
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        // 不同页码的评论数�?        const pageData = {
+            1: `
+                <!-- 帖子1 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmn4fc1-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">环保志愿�?/div>
+                            <div class="post-meta">
+                                <span>2小时�?/span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#捡垃�?/span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            今天参加了秦岭环保志愿者活动，清理了太平峪景区的垃圾�?br>
+                            <br>
+                            虽然很累，但是看到景区变得干净整洁，心里特别有成就感�?br>
+                            <br>
+                            希望更多的人加入到生态保护行动中来，共同保护我们的美丽家园！
+                        </div>
+                        <div class="post-images">
+                            <img src="images/avatars/avatar-mkeg7sod5dz4jj.svg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-15.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>156</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>28</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子2 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmuufwx-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">生态学�?/div>
+                            <div class="post-meta">
+                                <span>1天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#研究</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            最新研究显示：秦岭地区的生物多样性正在逐渐恢复�?br>
+                            <br>
+                            这得益于近年来政府和社会各界的共同努力，包括退耕还林、禁猎禁采、生态修复等措施�?br>
+                            <br>
+                            但是，我们仍然需要继续努力，保护好这片宝贵的生态环境�?                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>123</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>36</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>54</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            2: `
+                <!-- 帖子3 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmus1ob-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">自然摄影�?/div>
+                            <div class="post-meta">
+                                <span>3天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#摄影</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            昨天在秦岭深处拍到了一只金丝猴，太幸运了！<br>
+                            <br>
+                            金丝猴是国家一级保护动物，数量稀少。看到它们在自然环境中自由生活，我感到非常欣慰�?br>
+                            <br>
+                            保护生态环境，就是保护这些美丽的生灵�?                        </div>
+                        <div class="post-images">
+                            <img src="images/avatars/avatar-mkeg7soe1wb1jn.svg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-16.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>189</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>45</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>67</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子4 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmuvje1-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">环保组织</div>
+                            <div class="post-meta">
+                                <span>5天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#活动招募</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            本周日秦岭生态保护活动招募啦�?br>
+                            <br>
+                            📅 时间：本周日上午9�?br>
+                            📍 集合地点：太平峪景区入口<br>
+                            🎯 内容：清理景区垃圾、植树造林、生态知识宣�?br>
+                            💰 费用：免费，需提前报名<br>
+                            <br>
+                            欢迎大家踊跃报名，一起为保护秦岭生态环境贡献力量！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>98</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>24</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>31</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            3: `
+                <!-- 帖子5 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmv6re2-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">游客</div>
+                            <div class="post-meta">
+                                <span>1周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#建议</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            给景区提个建议：希望能在景区内设置更多的环保提示牌，并且增加垃圾桶的数量�?br>
+                            <br>
+                            上周去太平峪，看到很多游客随手扔垃圾，主要是因为找不到垃圾桶�?br>
+                            <br>
+                            保护环境，人人有责，但也需要景区提供便利的条件�?                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>89</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>23</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>27</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子6 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmv97cb-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">环保志愿�?/div>
+                            <div class="post-meta">
+                                <span>2周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#心得</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            做了一年的环保志愿者，有一些心得体会想和大家分享：<br>
+                            <br>
+                            1. 环保不是一个人的事，需要大家共同努�?br>
+                            2. 从小事做起，比如随手捡起垃圾、节约用水用�?br>
+                            3. 用自己的行动影响身边的人
+                            4. 学习环保知识，提高环保意�?                            <br>
+                            希望更多的人能加入到环保队伍中来�?                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>102</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>27</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>41</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            4: `
+                <!-- 帖子7 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmwdpsq-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">景区管理</div>
+                            <div class="post-meta">
+                                <span>3周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#公告</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            【景区公告】为了保护秦岭生态环境，我们将采取以下措施：<br>
+                            <br>
+                            1. 增加景区内垃圾桶的数量，�?00米设置一�?br>
+                            2. 在关键位置设置环保提示牌<br>
+                            3. 加强景区巡逻，制止破坏环境的行�?br>
+                            4. 定期组织环保活动，邀请游客参�?br>
+                            <br>
+                            感谢大家的理解和支持�?                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>145</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>42</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>58</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子8 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmwj4hl-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">学生</div>
+                            <div class="post-meta">
+                                <span>1个月�?/span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#学校活动</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            上周我们学校组织了秦岭生态保护活动，同学们都积极参与�?br>
+                            <br>
+                            我们在景区内清理垃圾、植树造林，还向游客宣传环保知识�?br>
+                            <br>
+                            虽然很累，但是大家都觉得很有意义。希望以后能多参加这样的活动�?                        </div>
+                        <div class="post-images">
+                            <img src="images/avatars/avatar-mkeg7soft9cw00.svg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-1.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>97</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>21</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>32</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            5: `
+                <!-- 帖子9 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmw5wun-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">环保专家</div>
+                            <div class="post-meta">
+                                <span>1个月�?/span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#知识</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            分享一些实用的环保知识�?br>
+                            <br>
+                            1. 减少使用一次性塑料制品，如塑料袋、塑料瓶�?br>
+                            2. 节约用水用电，养成良好的习惯<br>
+                            3. 分类投放垃圾，便于回收利�?br>
+                            4. 多使用公共交通工具，减少碳排�?br>
+                            5. 支持环保产品，拒绝购买野生动物制�?                            <br>
+                            环保从我做起，从身边的小事做起！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>132</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>34</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>46</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子10 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/avatars/avatar-mkegcnmxipmb-�?svg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">摄影�?/div>
+                            <div class="post-meta">
+                                <span>2个月�?/span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#生态保护行�?#摄影�?/span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            【摄影展预告】秦岭生态保护摄影展即将开幕！<br>
+                            <br>
+                            📅 时间�?0�?�?10�?�?br>
+                            📍 地点：西安美术馆<br>
+                            🎫 门票：免�?br>
+                            <br>
+                            本次摄影展将展示秦岭的美丽风光和生态保护成果，欢迎大家前来参观�?                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>112</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>29</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>47</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+        
+        // 切换页码函数
+        function switchPage(pageNum) {
+            if (pageData[pageNum]) {
+                posts.innerHTML = pageData[pageNum];
+                
+                // 重新绑定事件
+                bindPostEvents();
+            } else {
+                // 当页码不存在时，显示友好提示或跳转到最后一�?                alert(`�?${pageNum} 页暂无内容，已跳转到最后一页`);
+                const lastPage = Object.keys(pageData).length;
+                if (lastPage > 0) {
+                    switchPage(lastPage);
+                    // 更新active状�?                    paginationBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // 找到对应页码按钮并添加active�?                    paginationBtns.forEach(btn => {
+                        if (parseInt(btn.textContent) === lastPage) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            }
+        }
+        
+        // 绑定帖子交互事件
+        function bindPostEvents() {
+            document.querySelectorAll('.post-stat').forEach(stat => {
+                stat.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const span = this.querySelector('span');
+                    
+                    if (icon.classList.contains('fa-heart')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    } else if (icon.classList.contains('fa-comment')) {
+                        alert('评论功能开发中...');
+                    } else if (icon.classList.contains('fa-share')) {
+                        alert('分享功能开发中...');
+                    } else if (icon.classList.contains('fa-bookmark')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    }
+                });
+            });
+        }
+        
+        // 分页按钮点击事件
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pageNum = parseInt(this.textContent);
+                
+                if (!isNaN(pageNum)) {
+                    // 移除所有active�?                    paginationBtns.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加当前active�?                    this.classList.add('active');
+                    
+                    // 切换页面内容
+                    switchPage(pageNum);
+                } else if (this.textContent.includes('上一�?)) {
+                    // 上一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    if (currentPage > 1) {
+                        const prevPage = currentPage - 1;
+                        // 找到上一页按钮并点击
+                        paginationBtns.forEach(b => {
+                            if (parseInt(b.textContent) === prevPage) {
+                                b.click();
+                            }
+                        });
+                    }
+                } else if (this.textContent.includes('下一�?)) {
+                    // 下一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    const nextPage = currentPage + 1;
+                    // 找到下一页按钮并点击
+                    paginationBtns.forEach(b => {
+                        if (parseInt(b.textContent) === nextPage) {
+                            b.click();
+                        }
+                    });
+                }
+            });
+        });
+        
+        // 初始化页�?        bindPostEvents();
+        
+        // 关注话题功能
+        document.querySelector('.follow-btn').addEventListener('click', function() {
+            if (this.innerHTML.includes('关注话题')) {
+                this.innerHTML = '<i class="fas fa-check"></i> 已关�?;
+                this.style.backgroundColor = '#2d6a4f';
+                alert('关注话题成功�?);
+            } else {
+                this.innerHTML = '<i class="fas fa-plus"></i> 关注话题';
+                this.style.backgroundColor = 'var(--community-green)';
+                alert('已取消关注话题！');
+            }
+        });
+        
+        // 发布帖子功能
+        document.querySelector('.post-btn').addEventListener('click', function() {
+            alert('发布帖子功能开发中...');
+        });
+        
+        // 帖子交互功能
+        document.querySelectorAll('.post-stat').forEach(stat => {
+            stat.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+                
+                if (icon.classList.contains('fa-heart')) {
+                    // 点赞功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                } else if (icon.classList.contains('fa-comment')) {
+                    // 评论功能
+                    alert('评论功能开发中...');
+                } else if (icon.classList.contains('fa-share')) {
+                    // 分享功能
+                    alert('分享功能开发中...');
+                } else if (icon.classList.contains('fa-bookmark')) {
+                    // 收藏功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                }
+            });
+        });
+        
+        // 活跃用户交互
+        document.querySelectorAll('.active-user-item').forEach(user => {
+            user.addEventListener('click', function() {
+                const userName = this.querySelector('.active-user-name').textContent;
+                alert(`查看用户 ${userName} 详情功能开发中...`);
+            });
+        });
+        
+        // 相关话题交互
+        document.querySelectorAll('.related-topic-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 链接已经有href属性，这里可以添加额外的交互效�?                console.log('点击相关话题:', this.textContent);
+            });
+        });
+        
+        // 帖子点击查看详情
+        document.querySelectorAll('.post-item').forEach(post => {
+            post.addEventListener('click', function(e) {
+                // 如果点击的是交互按钮，不触发查看详情
+                if (!e.target.closest('.post-stat')) {
+                    alert('查看帖子详情功能开发中...');
+                }
+            });
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

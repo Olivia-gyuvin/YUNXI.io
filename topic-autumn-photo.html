@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>#秦岭秋色摄影 - 秦岭旅友圈</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 话题页面样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .topic-header {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .back-btn:hover {
+            color: var(--community-green);
+        }
+        
+        .topic-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .topic-title-section {
+            flex: 1;
+        }
+        
+        .topic-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .topic-description {
+            font-size: 16px;
+            color: var(--community-text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        
+        .topic-stats {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .topic-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .topic-action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .follow-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .post-btn {
+            background-color: var(--community-bg);
+            color: var(--community-text-primary);
+            border: 1px solid var(--community-border);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: var(--community-border);
+        }
+        
+        .content-container {
+            display: flex;
+            gap: 20px;
+        }
+        
+        /* 主内容区 */
+        .main-content {
+            flex: 3;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 5px;
+            background-color: var(--community-bg);
+            padding: 5px;
+            border-radius: 25px;
+            max-width: fit-content;
+            margin: 20px;
+        }
+        
+        .filter-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            background-color: transparent;
+            border: none;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            background-color: white;
+            color: var(--community-green);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .posts-list {
+            padding: 0 20px 20px;
+        }
+        
+        .post-item {
+            padding: 20px 0;
+            border-bottom: 1px solid var(--community-border);
+        }
+        
+        .post-item:last-child {
+            border-bottom: none;
+        }
+        
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .post-user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .post-user-info {
+            flex: 1;
+        }
+        
+        .post-user-name {
+            font-weight: bold;
+            font-size: 16px;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .post-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(3, 120px);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .post-image {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-stat:hover {
+            color: var(--community-green);
+        }
+        
+        /* 侧边栏 */
+        .sidebar {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--community-border);
+        }
+        
+        /* 相关话题 */
+        .related-topics {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .related-topic-item {
+            margin-bottom: 12px;
+        }
+        
+        .related-topic-link {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            color: var(--community-text-primary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .related-topic-link:hover {
+            color: var(--community-green);
+        }
+        
+        .related-topic-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 活跃用户 */
+        .active-users {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .active-user-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .active-user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .active-user-info {
+            flex: 1;
+        }
+        
+        .active-user-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 2px;
+        }
+        
+        .active-user-posts {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        /* 分页 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .pagination-btn {
+            padding: 10px 15px;
+            border: 1px solid var(--community-border);
+            background-color: white;
+            color: var(--community-text-primary);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination-btn:hover {
+            border-color: var(--community-green);
+            color: var(--community-green);
+        }
+        
+        .pagination-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .content-container {
+                flex-direction: column;
+            }
+            
+            .topic-info {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .topic-action-buttons {
+                width: 100%;
+            }
+            
+            .follow-btn,
+            .post-btn {
+                flex: 1;
+            }
+            
+            .topic-stats {
+                gap: 20px;
+            }
+            
+            .post-images {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .post-image {
+                width: 100%;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 话题页面内容 -->
+    <div class="container">
+        <!-- 话题头部 -->
+        <div class="topic-header">
+            <a href="community.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+                返回社区
+            </a>
+            
+            <div class="topic-info">
+                <div class="topic-title-section">
+                    <h1 class="topic-title">#秦岭秋色摄影</h1>
+                    <p class="topic-description">分享秦岭秋季的摄影作品、拍摄技巧、最佳拍摄地点、时间推荐等，让我们一起记录秦岭最美的秋天。</p>
+                    <div class="topic-stats">
+                        <div class="topic-stat">
+                            <i class="fas fa-file-alt"></i>
+                            <span>876 帖子</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-users"></i>
+                            <span>1.2k 关注者</span>
+                        </div>
+                        <div class="topic-stat">
+                            <i class="fas fa-clock"></i>
+                            <span>最近更新: 1小时前</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="topic-action-buttons">
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i> 关注话题
+                    </button>
+                    <button class="post-btn">
+                        <i class="fas fa-edit"></i> 发布帖子
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 内容区域 -->
+        <div class="content-container">
+            <!-- 主内容区 -->
+            <div class="main-content">
+                <div class="filter-tabs">
+                    <button class="filter-tab active">热门</button>
+                    <button class="filter-tab">最新</button>
+                    <button class="filter-tab">精华</button>
+                    <button class="filter-tab">关注</button>
+                </div>
+                
+                <div class="posts-list">
+                    <!-- 帖子1 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user1.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">王摄影师</div>
+                                <div class="post-meta">
+                                    <span>1小时前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#秦岭秋色摄影 #拍摄技巧</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                今天在秦岭深处拍到了绝美的秋色！分享几个拍摄技巧：<br>
+                                1. 最佳时间：上午9-11点，下午3-5点，光线柔和<br>
+                                2. 构图技巧：使用三分法，将主体放在交叉点上<br>
+                                3. 色彩搭配：枫叶红、银杏黄、松柏绿的对比<br>
+                                4. 设备建议：广角拍全景，长焦拍细节
+                            </div>
+                            <div class="post-images">
+                                <img src="images/autumn-3.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-16.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-1.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>345</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>56</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>28</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子2 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user2.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">摄影爱好者小张</div>
+                                <div class="post-meta">
+                                    <span>1天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#秦岭秋色摄影 #最佳地点</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                秦岭秋色最佳拍摄地点推荐：<br>
+                                <br>
+                                🍂 1. 太平峪：枫叶红透，层林尽染<br>
+                                🍂 2. 牛背梁：云海+秋色，人间仙境<br>
+                                🍂 3. 翠华山：天池倒映红叶，美不胜收<br>
+                                🍂 4. 黄柏塬：原生态秋色，摄影天堂<br>
+                                🍂 5. 红河谷：瀑布+红叶，动静结合
+                                <br>
+                                建议：错峰出行，周末人真的很多！
+                            </div>
+                            <div class="post-images">
+                                <img src="images/autumn-5.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-7.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-2.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>289</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>42</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>78</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子3 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user3.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">小李同学</div>
+                                <div class="post-meta">
+                                    <span>2天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#秦岭秋色摄影 #手机摄影</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                用手机拍的秦岭秋色，一样很美！<br>
+                                <br>
+                                手机摄影技巧：<br>
+                                🔹 使用专业模式，调整曝光和白平衡<br>
+                                🔹 利用HDR模式，保留更多细节<br>
+                                🔹 后期用Snapseed调整饱和度和对比度<br>
+                                🔹 善用前景，增加画面层次感
+                            </div>
+                            <div class="post-images">
+                                <img src="images/autumn-9.jpg" alt="帖子图片" class="post-image">
+                                <img src="images/autumn-4.jpg" alt="帖子图片" class="post-image">
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>156</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>28</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-share"></i>
+                                    <span>45</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 帖子4 -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <img src="images/user4.jpg" alt="用户头像" class="post-user-avatar">
+                            <div class="post-user-info">
+                                <div class="post-user-name">专业摄影师老刘</div>
+                                <div class="post-meta">
+                                    <span>3天前</span>
+                                    <span style="margin: 0 10px;">·</span>
+                                    <span>#秦岭秋色摄影 #器材推荐</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="post-content">
+                            <div class="post-text">
+                                秋季摄影器材推荐：<br>
+                                <br>
+                                📷 相机：全画幅或APS-C都可以<br>
+                                🔍 镜头：16-35mm（广角）、70-200mm（长焦）<br>
+                                ⚡ 三脚架：拍摄日出日落必备<br>
+                                🌈 滤镜：CPL偏振镜，增强色彩对比<br>
+                                🎒 摄影包：防水、大容量<br>
+                                <br>
+                                最重要的：一双舒适的鞋子！
+                            </div>
+                        </div>
+                        
+                        <div class="post-actions">
+                            <div class="post-stats">
+                                <div class="post-stat">
+                                    <i class="fas fa-heart"></i>
+                                    <span>189</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-comment"></i>
+                                    <span>36</span>
+                                </div>
+                                <div class="post-stat">
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>62</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 分页 -->
+                <div class="pagination">
+                    <button class="pagination-btn">上一页</button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn">2</button>
+                    <button class="pagination-btn">3</button>
+                    <button class="pagination-btn">4</button>
+                    <button class="pagination-btn">5</button>
+                    <button class="pagination-btn">下一页</button>
+                </div>
+            </div>
+            
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <!-- 相关话题 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">相关话题</h3>
+                    <ul class="related-topics">
+                        <li class="related-topic-item">
+                            <a href="topic-taipingyu.html" class="related-topic-link">
+                                <span>#太平峪攻略</span>
+                                <span class="related-topic-posts">1.2k 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-family-hiking.html" class="related-topic-link">
+                                <span>#亲子徒步推荐</span>
+                                <span class="related-topic-posts">654 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-farm-food.html" class="related-topic-link">
+                                <span>#农家乐美食</span>
+                                <span class="related-topic-posts">432 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-intangible-culture.html" class="related-topic-link">
+                                <span>#非遗体验分享</span>
+                                <span class="related-topic-posts">321 帖子</span>
+                            </a>
+                        </li>
+                        <li class="related-topic-item">
+                            <a href="topic-eco-protection.html" class="related-topic-link">
+                                <span>#生态保护行动</span>
+                                <span class="related-topic-posts">289 帖子</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 活跃用户 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题活跃用户</h3>
+                    <ul class="active-users">
+                        <li class="active-user-item">
+                            <img src="images/user1.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">王摄影师</div>
+                                <div class="active-user-posts">32 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user2.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">摄影爱好者小张</div>
+                                <div class="active-user-posts">24 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user4.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">专业摄影师老刘</div>
+                                <div class="active-user-posts">18 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user3.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">小李同学</div>
+                                <div class="active-user-posts">15 帖子</div>
+                            </div>
+                        </li>
+                        <li class="active-user-item">
+                            <img src="images/user5.jpg" alt="用户头像" class="active-user-avatar">
+                            <div class="active-user-info">
+                                <div class="active-user-name">户外摄影爱好者</div>
+                                <div class="active-user-posts">12 帖子</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 话题规则 -->
+                <div class="sidebar-card">
+                    <h3 class="sidebar-title">话题规则</h3>
+                    <ul style="font-size: 14px; color: var(--community-text-secondary); line-height: 1.6; padding-left: 20px;">
+                        <li>1. 请发布与秦岭秋色摄影相关的内容</li>
+                        <li>2. 分享真实的摄影作品和技巧</li>
+                        <li>3. 尊重原创，禁止盗图</li>
+                        <li>4. 禁止发布广告和违法内容</li>
+                        <li>5. 鼓励交流，互相学习</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 筛选标签切换
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active类
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active类
+                this.classList.add('active');
+                
+                // 模拟筛选结果
+                alert(`切换到${this.textContent}帖子功能开发中...`);
+            });
+        });
+        
+        // 分页功能实现
+        const posts = document.querySelector('.posts-list');
+        const paginationBtns = document.querySelectorAll('.pagination-btn');
+        
+        // 不同页码的评论数据
+        const pageData = {
+            1: `
+                <!-- 帖子1 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user11.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">王摄影师</div>
+                            <div class="post-meta">
+                                <span>2小时前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #太平峪</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            太平峪东线枫叶红了！最佳拍摄时间下午3-5点。<br>
+                            路线：景区入口 → 彩虹瀑布 → 一线天 → 原始森林<br>
+                            建议：穿舒适的鞋子，带足水和食物，摄影爱好者记得带长焦镜头。
+                        </div>
+                        <div class="post-images">
+                            <img src="images/autumn-1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-5.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-6.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>245</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>32</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>12</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子2 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user51.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">摄影爱好者</div>
+                            <div class="post-meta">
+                                <span>1天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            今天在秦岭深处拍到了绝美的秋景，分享给大家！<br>
+                            <br>
+                            拍摄地点：秦岭光头山<br>
+                            拍摄时间：下午4点左右<br>
+                            设备：Canon EOS R5 + 70-200mm f/2.8
+                        </div>
+                        <div class="post-images">
+                            <img src="images/autumn-4.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-6.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/autumn-5.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>189</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>45</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>67</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            2: `
+                <!-- 帖子3 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user28.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">风光摄影师</div>
+                            <div class="post-meta">
+                                <span>3天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #攻略</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            2026年秦岭秋色最佳拍摄地点推荐：<br>
+                            <br>
+                            1. 太平峪东线 - 枫叶林<br>
+                            2. 光头山 - 全景云海<br>
+                            3. 黄柏塬 - 彩林<br>
+                            4. 黎坪国家森林公园 - 红叶<br>
+                            <br>
+                            最佳拍摄时间：10月下旬至11月中旬
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>156</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>28</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>42</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子4 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user26.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">摄影新手</div>
+                            <div class="post-meta">
+                                <span>5天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #新手</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            第一次拍秦岭秋景，大家帮忙看看拍得怎么样？<br>
+                            <br>
+                            拍摄地点：太平峪
+                            设备：手机 iPhone 15 Pro
+                        </div>
+                        <div class="post-images">
+                            <img src="images/qiu1.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/qiu2.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>89</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>23</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>34</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            3: `
+                <!-- 帖子5 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user20.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">专业摄影师</div>
+                            <div class="post-meta">
+                                <span>1周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #技巧</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            分享几个秦岭秋景拍摄技巧：<br>
+                            <br>
+                            1. 最佳拍摄时间：日出后1小时和日落前1小时<br>
+                            2. 构图技巧：利用黄金分割、引导线<br>
+                            3. 相机设置：使用偏振镜增强色彩，小光圈获得大景深<br>
+                            4. 后期处理：调整白平衡和饱和度，增强对比度
+                            <br>
+                            希望对大家有帮助！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>123</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>36</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>54</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 帖子6 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user25.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">户外达人</div>
+                            <div class="post-meta">
+                                <span>10天前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #徒步</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            徒步秦岭拍秋景的装备清单：<br>
+                            <br>
+                            🎒 背包：30L左右，轻便防水<br>
+                            📷 相机：微单或单反，配18-55mm和70-200mm镜头<br>
+                            👟 鞋子：防滑徒步鞋<br>
+                            🧥 服装：防风外套，保暖内衣<br>
+                            💧 水壶：2L以上，带过滤功能<br>
+                            🥪 食物：能量棒、巧克力、面包
+                            <br>
+                            提醒：山区天气多变，记得带雨具！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>98</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>27</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>48</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            4: `
+                <!-- 帖子7 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user27.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">摄影爱好者小李</div>
+                            <div class="post-meta">
+                                <span>2周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #红叶</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            今天在太平峪拍到了漫山遍野的红叶，太壮观了！<br>
+                            <br>
+                            拍摄地点：太平峪西寺沟
+                            拍摄时间：下午3点
+                            <br>
+                            建议大家错峰出行，周末人真的太多了！
+                        </div>
+                        <div class="post-images">
+                            <img src="images/hong1.jpg" class="post-image">
+                            <img src="images/hong2.jpg" alt="帖子图片" class="post-image">
+                            <img src="images/hong3.jpg" alt="帖子图片" class="post-image">
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>167</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>34</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-share"></i>
+                                <span>21</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            5: `
+                <!-- 帖子8 -->
+                <div class="post-item">
+                    <div class="post-header">
+                        <img src="images/user23.jpg" alt="用户头像" class="post-user-avatar">
+                        <div class="post-user-info">
+                            <div class="post-user-name">资深摄影师</div>
+                            <div class="post-meta">
+                                <span>3周前</span>
+                                <span style="margin: 0 10px;">·</span>
+                                <span>#秦岭秋色摄影 #经验分享</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="post-text">
+                            分享10年秦岭秋景拍摄经验：<br>
+                            <br>
+                            1. 提前查天气预报，选择晴天拍摄<br>
+                            2. 早上拍云海，下午拍红叶<br>
+                            3. 带足备用电池和存储卡<br>
+                            4. 尊重自然，不要破坏植被
+                            5. 注意安全，不要冒险拍摄危险镜头
+                            <br>
+                            希望大家都能拍出满意的作品！
+                        </div>
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-stats">
+                            <div class="post-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>212</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-comment"></i>
+                                <span>47</span>
+                            </div>
+                            <div class="post-stat">
+                                <i class="fas fa-bookmark"></i>
+                                <span>89</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        };
+        
+        // 切换页码函数
+        function switchPage(pageNum) {
+            if (pageData[pageNum]) {
+                posts.innerHTML = pageData[pageNum];
+                
+                // 重新绑定事件
+                bindPostEvents();
+            } else {
+                // 当页码不存在时，显示友好提示或跳转到最后一页
+                alert(`第 ${pageNum} 页暂无内容，已跳转到最后一页`);
+                const lastPage = Object.keys(pageData).length;
+                if (lastPage > 0) {
+                    switchPage(lastPage);
+                    // 更新active状态
+                    paginationBtns.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    // 找到对应页码按钮并添加active类
+                    paginationBtns.forEach(btn => {
+                        if (parseInt(btn.textContent) === lastPage) {
+                            btn.classList.add('active');
+                        }
+                    });
+                }
+            }
+        }
+        
+        // 绑定帖子交互事件
+        function bindPostEvents() {
+            document.querySelectorAll('.post-stat').forEach(stat => {
+                stat.addEventListener('click', function() {
+                    const icon = this.querySelector('i');
+                    const span = this.querySelector('span');
+                    
+                    if (icon.classList.contains('fa-heart')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    } else if (icon.classList.contains('fa-comment')) {
+                        alert('评论功能开发中...');
+                    } else if (icon.classList.contains('fa-share')) {
+                        alert('分享功能开发中...');
+                    } else if (icon.classList.contains('fa-bookmark')) {
+                        let count = parseInt(span.textContent);
+                        count++;
+                        span.textContent = count;
+                        this.style.color = 'var(--community-green)';
+                    }
+                });
+            });
+        }
+        
+        // 分页按钮点击事件
+        paginationBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const pageNum = parseInt(this.textContent);
+                
+                if (!isNaN(pageNum)) {
+                    // 移除所有active类
+                    paginationBtns.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    // 添加当前active类
+                    this.classList.add('active');
+                    
+                    // 切换页面内容
+                    switchPage(pageNum);
+                } else if (this.textContent.includes('上一页')) {
+                    // 上一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    if (currentPage > 1) {
+                        const prevPage = currentPage - 1;
+                        // 找到上一页按钮并点击
+                        paginationBtns.forEach(b => {
+                            if (parseInt(b.textContent) === prevPage) {
+                                b.click();
+                            }
+                        });
+                    }
+                } else if (this.textContent.includes('下一页')) {
+                    // 下一页逻辑
+                    const currentActive = document.querySelector('.pagination-btn.active');
+                    const currentPage = parseInt(currentActive.textContent);
+                    const nextPage = currentPage + 1;
+                    // 找到下一页按钮并点击
+                    paginationBtns.forEach(b => {
+                        if (parseInt(b.textContent) === nextPage) {
+                            b.click();
+                        }
+                    });
+                }
+            });
+        });
+        
+        // 初始化页面
+        bindPostEvents();
+        
+        // 关注话题功能
+        document.querySelector('.follow-btn').addEventListener('click', function() {
+            if (this.innerHTML.includes('关注话题')) {
+                this.innerHTML = '<i class="fas fa-check"></i> 已关注';
+                this.style.backgroundColor = '#2d6a4f';
+                alert('关注话题成功！');
+            } else {
+                this.innerHTML = '<i class="fas fa-plus"></i> 关注话题';
+                this.style.backgroundColor = 'var(--community-green)';
+                alert('已取消关注话题！');
+            }
+        });
+        
+        // 发布帖子功能
+        document.querySelector('.post-btn').addEventListener('click', function() {
+            alert('发布帖子功能开发中...');
+        });
+        
+        // 帖子交互功能
+        document.querySelectorAll('.post-stat').forEach(stat => {
+            stat.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+                
+                if (icon.classList.contains('fa-heart')) {
+                    // 点赞功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                } else if (icon.classList.contains('fa-comment')) {
+                    // 评论功能
+                    alert('评论功能开发中...');
+                } else if (icon.classList.contains('fa-share')) {
+                    // 分享功能
+                    alert('分享功能开发中...');
+                } else if (icon.classList.contains('fa-bookmark')) {
+                    // 收藏功能
+                    let count = parseInt(span.textContent);
+                    count++;
+                    span.textContent = count;
+                    this.style.color = 'var(--community-green)';
+                }
+            });
+        });
+        
+        // 活跃用户交互
+        document.querySelectorAll('.active-user-item').forEach(user => {
+            user.addEventListener('click', function() {
+                const userName = this.querySelector('.active-user-name').textContent;
+                alert(`查看用户 ${userName} 详情功能开发中...`);
+            });
+        });
+        
+        // 相关话题交互
+        document.querySelectorAll('.related-topic-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // 链接已经有href属性，这里可以添加额外的交互效果
+                console.log('点击相关话题:', this.textContent);
+            });
+        });
+        
+        // 帖子点击查看详情
+        document.querySelectorAll('.post-item').forEach(post => {
+            post.addEventListener('click', function(e) {
+                // 如果点击的是交互按钮，不触发查看详情
+                if (!e.target.closest('.post-stat')) {
+                    alert('查看帖子详情功能开发中...');
+                }
+            });
+        });
+    </script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
