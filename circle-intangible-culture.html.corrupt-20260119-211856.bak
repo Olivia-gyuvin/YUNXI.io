@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非遗文化�?- 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 圈子页面专用样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .community-container {
+            display: flex;
+            min-height: calc(100vh - 160px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* 左侧栏样�?*/
+        .left-sidebar {
+            width: 15%;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        /* 中间主区样式 */
+        .main-content {
+            width: 70%;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        /* 右侧栏样�?*/
+        .right-sidebar {
+            width: 15%;
+        }
+        
+        /* 圈子头部 */
+        .circle-header {
+            padding: 30px;
+            background-color: var(--community-green);
+            color: white;
+            text-align: center;
+        }
+        
+        .circle-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        .circle-header p {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .circle-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .circle-stat-item {
+            text-align: center;
+        }
+        
+        .circle-stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .circle-stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* 圈子操作按钮 */
+        .circle-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .circle-action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .circle-action-btn.primary {
+            background-color: white;
+            color: var(--community-green);
+        }
+        
+        .circle-action-btn.primary:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .circle-action-btn.secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .circle-action-btn.secondary:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 圈子内容区域 */
+        .circle-content {
+            padding: 20px;
+        }
+        
+        /* 圈子简�?*/
+        .circle-intro {
+            background-color: var(--community-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .circle-intro h3 {
+            margin-top: 0;
+            color: var(--community-green);
+        }
+        
+        /* 成员列表 */
+        .members-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .member-item {
+            text-align: center;
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+        
+        .member-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin: 0;
+        }
+        
+        .member-role {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+            margin: 4px 0 0 0;
+        }
+        
+        /* 热门帖子区域 */
+        .hot-posts {
+            margin-bottom: 30px;
+        }
+        
+        .hot-posts h3 {
+            margin-bottom: 15px;
+            color: var(--community-green);
+        }
+        
+        /* 响应式设�?*/
+        @media (max-width: 1024px) {
+            .community-container {
+                flex-direction: column;
+            }
+            
+            .left-sidebar,
+            .main-content,
+            .right-sidebar {
+                width: 100%;
+            }
+        }
+        
+        /* 折叠组件样式 */
+        .collapsible-container {
+            margin-bottom: 10px;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible-header:hover {
+            background-color: var(--community-bg);
+        }
+        
+        .collapsible-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+        }
+        
+        .collapsible-toggle {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            transition: transform 0.3s ease;
+        }
+        
+        .collapsible-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+        
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible-content.expanded {
+            padding: 0 15px 15px;
+            max-height: 1000px;
+        }
+        
+        /* 内容卡片样式 */
+        .content-card {
+            background-color: var(--community-card-bg);
+            border: 1px solid var(--community-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .user-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+        
+        .interaction-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--community-border);
+        }
+        
+        .interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: var(--community-text-secondary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .interaction-item:hover {
+            color: var(--community-green);
+        }
+        
+        /* 右侧栏样�?*/
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--community-text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 圈子内容区域 -->
+    <section class="community">
+        <div class="community-container">
+            <!-- 左侧�?-->
+            <div class="left-sidebar">
+                <!-- 圈子信息折叠容器 -->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">圈子信息</div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="circle-stats" style="display: block; gap: 0; margin-bottom: 15px;">
+                            <div style="margin-bottom: 10px;">
+                                <div class="circle-stat-number">560</div>
+                                <div class="circle-stat-label">成员�?/div>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <div class="circle-stat-number">123</div>
+                                <div class="circle-stat-label">动态数</div>
+                            </div>
+                            <div>
+                                <div class="circle-stat-number">15h</div>
+                                <div class="circle-stat-label">活跃时长</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 热门标签折叠容器 -->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">热门标签</div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div style="margin-bottom: 20px;">
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#非遗文化</span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#传统工艺</span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#传承�?/span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#文化传承</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最近活跃成员折叠容�?-->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">最近活跃成�?/div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="members-list" style="grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnliwn1n-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">非遗传承�?/p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnli39rs-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">文化爱好�?/p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnlikj8z-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">传统工艺�?/p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnljrh4n-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">民俗研究�?/p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中间主区 -->
+            <div class="main-content">
+                <!-- 圈子头部 -->
+                <div class="circle-header">
+                    <h1>🎨 非遗文化�?/h1>
+                    <p>传承和弘扬秦岭地区的非物质文化遗产，让传统技艺焕发新�?/p>
+                    <div class="circle-stats">
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">560</span>
+                            <span class="circle-stat-label">成员</span>
+                        </div>
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">123</span>
+                            <span class="circle-stat-label">动�?/span>
+                        </div>
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">15h</span>
+                            <span class="circle-stat-label">活跃时长</span>
+                        </div>
+                    </div>
+                    <div class="circle-actions">
+                        <button class="circle-action-btn primary">加入圈子</button>
+                        <button class="circle-action-btn secondary"><i class="fas fa-share-alt"></i> 分享</button>
+                    </div>
+                </div>
+                
+                <!-- 圈子内容 -->
+                <div class="circle-content">
+                    <!-- 圈子简�?-->
+                    <div class="circle-intro">
+                        <h3>圈子简�?/h3>
+                        <p>非遗文化圈是致力于传承和弘扬秦岭地区非物质文化遗产的交流平台。这里汇聚了非遗传承人、传统工艺师、文化研究者和爱好者，共同探讨非遗保护、传承和创新，让传统技艺在现代社会焕发新生�?/p>
+                        <p><strong>圈子特色�?/strong></p>
+                        <ul>
+                            <li>非遗项目介绍和展�?/li>
+                            <li>传承人事迹和经验分享</li>
+                            <li>传统工艺教学和交�?/li>
+                            <li>非遗活动组织和宣�?/li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 热门帖子 -->
+                    <div class="hot-posts">
+                        <h3>热门分享</h3>
+                        
+                        <!-- 非遗分享1 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnljostf-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">非遗传承�?/div>
+                                    <div class="user-meta">2小时�?/div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#传统工艺</span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#剪纸艺术</span>
+                                </div>
+                                
+                                <h4 class="post-title">秦岭剪纸艺术的传承与创新</h4>
+                                
+                                <div class="image-grid">
+                                    <img src="images/autumn-5.jpg" alt="秦岭剪纸">
+                                    <img src="images/autumn-6.jpg" alt="秦岭剪纸">
+                                    <img src="images/autumn-7.jpg" alt="秦岭剪纸">
+                                </div>
+                                
+                                <div class="post-text">
+                                    剪纸是秦岭地区重要的非遗项目之一，有着悠久的历史和丰富的文化内涵。作为剪纸艺术的传承人，我想分享一些剪纸的基本技巧和创新思路�?br>
+                                    1. 传统图案的寓意和设计方法<br>
+                                    2. 现代剪纸的创新应�?br>
+                                    3. 剪纸艺术的传承现状和挑战<br>
+                                    <span class="expand-btn" style="color: var(--community-green); cursor: pointer;">[展开全文]</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>234</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>45</span></div>
+                                <div class="interaction-item"><i class="fas fa-bookmark"></i> <span>67</span></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 非遗分享2 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnljtakz-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">文化爱好�?/div>
+                                    <div class="user-meta">1天前</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#非遗活动</span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#文化�?/span>
+                                </div>
+                                
+                                <h4 class="post-title">12月非遗文化节活动预告</h4>
+                                
+                                <div class="post-text">
+                                    📅 时间�?2�?0�?12�?br>
+                                    📍 地点：西安市非遗文化中心<br>
+                                    🎊 活动内容�?br>
+                                    �?非遗项目展示和体�?br>
+                                    �?传承人与观众互动<br>
+                                    �?传统工艺现场教学<br>
+                                    �?非遗产品展销<br>
+                                    欢迎大家前来参加，感受非遗文化的魅力�?                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>189</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>32</span></div>
+                                <div class="interaction-item"><i class="fas fa-share"></i> <span>23</span></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 非遗分享3 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnlkvra0-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">传统工艺�?/div>
+                                    <div class="user-meta">2天前</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#传统技�?/span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#陶艺</span>
+                                </div>
+                                
+                                <h4 class="post-title">秦岭黑陶制作工艺分享</h4>
+                                
+                                <div class="post-text">
+                                    秦岭黑陶是陕西传统工艺之一，有着独特的制作工艺和艺术风格。今天我来分享一下黑陶的制作过程�?br>
+                                    1. 选土和制�?br>
+                                    2. 成型和装�?br>
+                                    3. 阴干和烧�?br>
+                                    4. 抛光和上�?br>
+                                    黑陶制作需要耐心和技巧，每一步都至关重要�?                                    <span class="expand-btn" style="color: var(--community-green); cursor: pointer;">[展开全文]</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>156</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>28</span></div>
+                                <div class="interaction-item"><i class="fas fa-bookmark"></i> <span>45</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧�?-->
+            <div class="right-sidebar">
+                <!-- 管理员推�?-->
+                <div class="sidebar-card">
+                    <h3>管理员推�?/h3>
+                    <div class="content-card" style="margin-bottom: 10px; padding: 15px;">
+                        <div class="user-info" style="margin-bottom: 10px;">
+                            <img src="images/avatars/avatar-mkegcnlkmxs1-U.svg" alt="用户头像" class="user-avatar" style="width: 30px; height: 30px;">
+                            <div class="user-details">
+                                <div class="user-name" style="font-size: 14px;">管理�?/div>
+                            </div>
+                        </div>
+                        <div class="post-text" style="margin-bottom: 10px; font-size: 13px;">
+                            欢迎新成员加入！请查看我们的<a href="#" style="color: var(--community-green);">非遗项目目录</a>�?a href="#" style="color: var(--community-green);">活动安排</a>�?                        </div>
+                    </div>
+                </div>
+                
+                <!-- 近期活动 -->
+                <div class="sidebar-card">
+                    <h3>近期活动</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 15px; padding: 10px; background-color: var(--community-bg); border-radius: 8px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">🎭 11�?5�?非遗项目展示</div>
+                            <div style="font-size: 12px; color: var(--community-text-secondary);">下午2�?线上直播</div>
+                        </li>
+                        <li style="margin-bottom: 15px; padding: 10px; background-color: var(--community-bg); border-radius: 8px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">✂️ 12�?�?剪纸工艺教学</div>
+                            <div style="font-size: 12px; color: var(--community-text-secondary);">上午10�?线下活动</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 非遗小贴�?-->
+                <div class="sidebar-card">
+                    <h3>非遗小贴�?/h3>
+                    <div style="font-size: 14px; line-height: 1.6;">
+                        <p style="margin-bottom: 10px;"><strong>什么是非物质文化遗产？</strong>非物质文化遗产是指各族人民世代相传并视为其文化遗产组成部分的各种传统文化表现形式，以及与传统文化表现形式相关的实物和场所�?/p>
+                        <p><strong>非遗的分类：</strong>包括传统口头文学以及作为其载体的语言、传统美术、书法、音乐、舞蹈、戏剧、曲艺和杂技、传统技艺、医药和历法、传统礼仪、节庆等民俗等�?/p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 圈子操作按钮
+        document.querySelector('.circle-action-btn.primary').addEventListener('click', function() {
+            alert('你的等级不够');
+        });
+        
+        // 交互功能
+        document.querySelectorAll('.interaction-item').forEach(item => {
+            item.addEventListener('click', function() {
+                alert('你的等级不够');
+            });
+        });
+        
+        // 展开全文功能
+        document.querySelectorAll('.expand-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('你的等级不够');
+            });
+        });
+        
+        // 折叠功能实现
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有带有collapsible-header类的元素添加点击事件
+            const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+            collapsibleHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // 获取当前折叠容器
+                    const container = this.closest('.collapsible-container');
+                    // 获取内容区域和切换按�?                    const content = container.querySelector('.collapsible-content');
+                    const toggle = container.querySelector('.collapsible-toggle');
+                    
+                    // 切换展开/折叠状�?                    content.classList.toggle('expanded');
+                    toggle.classList.toggle('collapsed');
+                });
+            });
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

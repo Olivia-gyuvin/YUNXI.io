@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>徒步登山�?- 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 圈子页面专用样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .community-container {
+            display: flex;
+            min-height: calc(100vh - 160px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* 左侧栏样�?*/
+        .left-sidebar {
+            width: 15%;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        /* 中间主区样式 */
+        .main-content {
+            width: 70%;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        /* 右侧栏样�?*/
+        .right-sidebar {
+            width: 15%;
+        }
+        
+        /* 圈子头部 */
+        .circle-header {
+            padding: 30px;
+            background-color: var(--community-green);
+            color: white;
+            text-align: center;
+        }
+        
+        .circle-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+        }
+        
+        .circle-header p {
+            margin: 0 0 20px 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .circle-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+        
+        .circle-stat-item {
+            text-align: center;
+        }
+        
+        .circle-stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .circle-stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        /* 圈子操作按钮 */
+        .circle-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .circle-action-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .circle-action-btn.primary {
+            background-color: white;
+            color: var(--community-green);
+        }
+        
+        .circle-action-btn.primary:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .circle-action-btn.secondary {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .circle-action-btn.secondary:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* 圈子内容区域 */
+        .circle-content {
+            padding: 20px;
+        }
+        
+        /* 圈子简�?*/
+        .circle-intro {
+            background-color: var(--community-bg);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .circle-intro h3 {
+            margin-top: 0;
+            color: var(--community-green);
+        }
+        
+        /* 成员列表 */
+        .members-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .member-item {
+            text-align: center;
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 8px;
+        }
+        
+        .member-name {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin: 0;
+        }
+        
+        .member-role {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+            margin: 4px 0 0 0;
+        }
+        
+        /* 热门帖子区域 */
+        .hot-posts {
+            margin-bottom: 30px;
+        }
+        
+        .hot-posts h3 {
+            margin-bottom: 15px;
+            color: var(--community-green);
+        }
+        
+        /* 响应式设�?*/
+        @media (max-width: 1024px) {
+            .community-container {
+                flex-direction: column;
+            }
+            
+            .left-sidebar,
+            .main-content,
+            .right-sidebar {
+                width: 100%;
+            }
+        }
+        
+        /* 折叠组件样式 */
+        .collapsible-container {
+            margin-bottom: 10px;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible-header:hover {
+            background-color: var(--community-bg);
+        }
+        
+        .collapsible-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+        }
+        
+        .collapsible-toggle {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            transition: transform 0.3s ease;
+        }
+        
+        .collapsible-toggle.collapsed {
+            transform: rotate(-90deg);
+        }
+        
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .collapsible-content.expanded {
+            padding: 0 15px 15px;
+            max-height: 1000px;
+        }
+        
+        /* 内容卡片样式 */
+        .content-card {
+            background-color: var(--community-card-bg);
+            border: 1px solid var(--community-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .user-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+        
+        .interaction-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--community-border);
+        }
+        
+        .interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: var(--community-text-secondary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .interaction-item:hover {
+            color: var(--community-green);
+        }
+        
+        /* 右侧栏样�?*/
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--community-text-primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 圈子内容区域 -->
+    <section class="community">
+        <div class="community-container">
+            <!-- 左侧�?-->
+            <div class="left-sidebar">
+                <!-- 圈子信息折叠容器 -->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">圈子信息</div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="circle-stats" style="display: block; gap: 0; margin-bottom: 15px;">
+                            <div style="margin-bottom: 10px;">
+                                <div class="circle-stat-number">2.3k</div>
+                                <div class="circle-stat-label">成员�?/div>
+                            </div>
+                            <div style="margin-bottom: 10px;">
+                                <div class="circle-stat-number">567</div>
+                                <div class="circle-stat-label">动态数</div>
+                            </div>
+                            <div>
+                                <div class="circle-stat-number">32h</div>
+                                <div class="circle-stat-label">活跃时长</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 热门标签折叠容器 -->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">热门标签</div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div style="margin-bottom: 20px;">
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#徒步</span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#登山</span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#秦岭</span>
+                            <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#户外</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 最近活跃成员折叠容�?-->
+                <div class="collapsible-container">
+                    <div class="collapsible-header">
+                        <div class="collapsible-title">最近活跃成�?/div>
+                        <div class="collapsible-toggle">
+                            <i class="fas fa-chevron-right"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="members-list" style="grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px;">
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnldojwd-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">登山达人</p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnleglun-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">徒步小王</p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnle8b5o-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">户外爱好�?/p>
+                            </div>
+                            <div class="member-item">
+                                <img src="images/avatars/avatar-mkegcnlf7477-�?svg" alt="成员头像" class="member-avatar" style="width: 50px; height: 50px;">
+                                <p class="member-name" style="font-size: 12px;">秦岭探索�?/p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中间主区 -->
+            <div class="main-content">
+                <!-- 圈子头部 -->
+                <div class="circle-header">
+                    <h1>🥾 徒步登山�?/h1>
+                    <p>分享秦岭徒步路线、登山经验和户外装备，与志同道合的朋友一起探索秦岭的壮美</p>
+                    <div class="circle-stats">
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">2.3k</span>
+                            <span class="circle-stat-label">成员</span>
+                        </div>
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">567</span>
+                            <span class="circle-stat-label">动�?/span>
+                        </div>
+                        <div class="circle-stat-item">
+                            <span class="circle-stat-number">32h</span>
+                            <span class="circle-stat-label">活跃时长</span>
+                        </div>
+                    </div>
+                    <div class="circle-actions">
+                        <button class="circle-action-btn primary">加入圈子</button>
+                        <button class="circle-action-btn secondary"><i class="fas fa-share-alt"></i> 分享</button>
+                    </div>
+                </div>
+                
+                <!-- 圈子内容 -->
+                <div class="circle-content">
+                    <!-- 圈子简�?-->
+                    <div class="circle-intro">
+                        <h3>圈子简�?/h3>
+                        <p>徒步登山组是秦岭地区最活跃的户外爱好者社区，这里汇聚了来自各地的徒步爱好者和登山专家。我们分享徒步路线、登山经验、户外装备评测，组织线下徒步活动，共同探索秦岭的壮美风光�?/p>
+                        <p><strong>圈子特色�?/strong></p>
+                        <ul>
+                            <li>分享详细的秦岭徒步路线和攻略</li>
+                            <li>讨论和评测户外装�?/li>
+                            <li>组织线下徒步和登山活�?/li>
+                            <li>交流户外安全知识和急救技�?/li>
+                        </ul>
+                    </div>
+                    
+                    <!-- 热门帖子 -->
+                    <div class="hot-posts">
+                        <h3>热门分享</h3>
+                        
+                        <!-- 徒步分享1 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnlfzz7z-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">登山达人</div>
+                                    <div class="user-meta">5小时�?/div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#徒步路线</span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#太平�?/span>
+                                </div>
+                                
+                                <h4 class="post-title">太平峪东线完整攻�?/h4>
+                                
+                                <div class="image-grid">
+                                    <img src="images/autumn-2.jpg" alt="太平峪徒�?>
+                                    <img src="images/autumn-3.jpg" alt="太平峪徒�?>
+                                    <img src="images/autumn-4.jpg" alt="太平峪徒�?>
+                                </div>
+                                
+                                <div class="post-text">
+                                    分享太平峪东线的完整徒步攻略�?br>
+                                    📍 起点：太平峪�?br>
+                                    �?全程：约12公里<br>
+                                    ⚠️ 难度：中�?br>
+                                    沿途风景优美，有瀑布、溪流和红叶，适合周末徒步。建议早�?点出发，携带足够的水和食物�?                                    <span class="expand-btn" style="color: var(--community-green); cursor: pointer;">[展开全文]</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>345</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>67</span></div>
+                                <div class="interaction-item"><i class="fas fa-bookmark"></i> <span>98</span></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 徒步分享2 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnlgp9gs-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">徒步小王</div>
+                                    <div class="user-meta">1天前</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#装备评测</span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#登山�?/span>
+                                </div>
+                                
+                                <h4 class="post-title">登山鞋实测：三款热门品牌对比</h4>
+                                
+                                <div class="post-text">
+                                    最近测试了三款热门登山鞋，分享一下使用体验：<br>
+                                    1. **品牌A**：轻便舒适，适合短距离徒�?br>
+                                    2. **品牌B**：防水性能出色，适合雨天徒步<br>
+                                    3. **品牌C**：支撑性好，适合长距离和高难度路�?br>
+                                    详细评测请点击展开查看�?                                    <span class="expand-btn" style="color: var(--community-green); cursor: pointer;">[展开全文]</span>
+                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>289</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>45</span></div>
+                                <div class="interaction-item"><i class="fas fa-bookmark"></i> <span>76</span></div>
+                            </div>
+                        </div>
+                        
+                        <!-- 徒步分享3 -->
+                        <div class="content-card">
+                            <div class="user-info">
+                                <img src="images/avatars/avatar-mkegcnlgz4hg-U.svg" alt="用户头像" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">户外爱好�?/div>
+                                    <div class="user-meta">2天前</div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-content">
+                                <div class="post-tags">
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#活动约伴</span>
+                                    <span class="post-tag" style="display: inline-block; background-color: var(--community-bg); color: var(--community-green); padding: 4px 12px; border-radius: 15px; font-size: 12px; margin-right: 8px; margin-bottom: 8px;">#11月周�?/span>
+                                </div>
+                                
+                                <div class="post-text">
+                                    🥾 11�?0日太平峪徒步约伴<br>
+                                    �?早上8�?太平峪口集合<br>
+                                    📍 东线环线（中等难度）<br>
+                                    👥 已有3人，再招2-3�?br>
+                                    要求：有徒步经验，装备齐全，遵守团队纪律<br>
+                                    感兴趣的朋友请留言或私信我�?                                </div>
+                                
+                                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                    <button class="circle-action-btn primary" style="flex: 1; padding: 10px 20px; font-size: 14px;">加入活动</button>
+                                    <button class="circle-action-btn secondary" style="flex: 1; padding: 10px 20px; font-size: 14px; background-color: var(--community-bg); color: var(--community-text-primary);">私聊组织�?/button>
+                                </div>
+                            </div>
+                            
+                            <div class="interaction-bar">
+                                <div class="interaction-item"><i class="fas fa-heart"></i> <span>156</span></div>
+                                <div class="interaction-item"><i class="fas fa-comment"></i> <span>23</span></div>
+                                <div class="interaction-item"><i class="fas fa-share"></i> <span>12</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧�?-->
+            <div class="right-sidebar">
+                <!-- 管理员推�?-->
+                <div class="sidebar-card">
+                    <h3>管理员推�?/h3>
+                    <div class="content-card" style="margin-bottom: 10px; padding: 15px;">
+                        <div class="user-info" style="margin-bottom: 10px;">
+                            <img src="images/avatars/avatar-mkegcnlgrsxg-U.svg" alt="用户头像" class="user-avatar" style="width: 30px; height: 30px;">
+                            <div class="user-details">
+                                <div class="user-name" style="font-size: 14px;">管理�?/div>
+                            </div>
+                        </div>
+                        <div class="post-text" style="margin-bottom: 10px; font-size: 13px;">
+                            欢迎新成员加入！记得查看<a href="#" style="color: var(--community-green);">徒步安全指南</a>�?a href="#" style="color: var(--community-green);">活动安排</a>�?                        </div>
+                    </div>
+                </div>
+                
+                <!-- 近期活动 -->
+                <div class="sidebar-card">
+                    <h3>近期活动</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 15px; padding: 10px; background-color: var(--community-bg); border-radius: 8px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">🥾 11�?0�?太平峪徒�?/div>
+                            <div style="font-size: 12px; color: var(--community-text-secondary);">早上8�?景区门口集合</div>
+                        </li>
+                        <li style="margin-bottom: 15px; padding: 10px; background-color: var(--community-bg); border-radius: 8px;">
+                            <div style="font-weight: bold; margin-bottom: 5px;">🎓 11�?6�?户外急救知识分享</div>
+                            <div style="font-size: 12px; color: var(--community-text-secondary);">晚上7�?线上直播</div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 徒步小贴�?-->
+                <div class="sidebar-card">
+                    <h3>徒步小贴�?/h3>
+                    <div style="font-size: 14px; line-height: 1.6;">
+                        <p style="margin-bottom: 10px;"><strong>准备合适的装备�?/strong>根据路线难度选择合适的登山鞋、背包和衣物，携带足够的水和食物�?/p>
+                        <p><strong>关注天气变化�?/strong>秦岭山区天气多变，出发前一定要查看天气预报，做好应对突发天气的准备�?/p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // 圈子操作按钮
+        document.querySelector('.circle-action-btn.primary').addEventListener('click', function() {
+            alert('你的等级不够');
+        });
+        
+        // 交互功能
+        document.querySelectorAll('.interaction-item').forEach(item => {
+            item.addEventListener('click', function() {
+                alert('你的等级不够');
+            });
+        });
+        
+        // 展开全文功能
+        document.querySelectorAll('.expand-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                alert('你的等级不够');
+            });
+        });
+        
+        // 私聊组织者功�?        document.querySelectorAll('.circle-action-btn.secondary').forEach(btn => {
+            if (btn.textContent === '私聊组织�?) {
+                btn.addEventListener('click', function() {
+                    alert('你的等级不够');
+                });
+            }
+        });
+        
+        // 折叠功能实现
+        document.addEventListener('DOMContentLoaded', function() {
+            // 为所有带有collapsible-header类的元素添加点击事件
+            const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+            collapsibleHeaders.forEach(header => {
+                header.addEventListener('click', function() {
+                    // 获取当前折叠容器
+                    const container = this.closest('.collapsible-container');
+                    // 获取内容区域和切换按�?                    const content = container.querySelector('.collapsible-content');
+                    const toggle = container.querySelector('.collapsible-toggle');
+                    
+                    // 切换展开/折叠状�?                    content.classList.toggle('expanded');
+                    toggle.classList.toggle('collapsed');
+                });
+            });
+        });
+    </script>
+    
+    <script src="script.js"></script>
+</body>
+</html>

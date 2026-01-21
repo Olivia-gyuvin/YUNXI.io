@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秦岭旅友�?- 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 社区页面专用样式 */
+        :root {
+            --community-green: #3A8B5F;
+            --community-bg: #F8F9FA;
+            --community-card-bg: white;
+            --community-text-primary: #333;
+            --community-text-secondary: #999;
+            --community-border: #E0E0E0;
+        }
+        
+        body {
+            background-color: var(--community-bg);
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        .community-container {
+            display: flex;
+            min-height: calc(100vh - 160px);
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 20px;
+        }
+        
+        /* 左侧栏样�?*/
+        .left-sidebar {
+            width: 20%;
+            background-color: var(--community-green);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 25px;
+        }
+        
+        .sidebar-section h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .sidebar-section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-section li {
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        
+        .sidebar-section li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-section li span {
+            font-size: 14px;
+            margin-left: 8px;
+        }
+        
+        .sidebar-section li i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* 中间主区样式 */
+        .main-content {
+            width: 60%;
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .top-action-bar {
+            padding: 20px;
+            background-color: var(--community-card-bg);
+            border-bottom: 1px solid var(--community-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .post-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .post-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .filter-tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-tab.active {
+            color: var(--community-green);
+            border-bottom-color: var(--community-green);
+        }
+        
+        .content-stream {
+            padding: 20px;
+        }
+        
+        .content-card {
+            background-color: var(--community-card-bg);
+            border: 1px solid var(--community-border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .content-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .user-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .card-content {
+            margin-bottom: 15px;
+        }
+        
+        .post-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--community-text-primary);
+            margin-bottom: 10px;
+        }
+        
+        .post-text {
+            font-size: 14px;
+            color: var(--community-text-primary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .image-grid img:hover {
+            transform: scale(1.05);
+        }
+        
+        .post-tags {
+            margin-bottom: 15px;
+        }
+        
+        .post-tag {
+            display: inline-block;
+            background-color: var(--community-bg);
+            color: var(--community-green);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .practical-info {
+            background-color: var(--community-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .practical-info p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .expand-btn {
+            color: var(--community-green);
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .interaction-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--community-border);
+        }
+        
+        .interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: var(--community-text-secondary);
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .interaction-item:hover {
+            color: var(--community-green);
+        }
+        
+        .action-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .action-btn:hover {
+            background-color: #2d6a4f;
+        }
+        
+        /* 右侧栏样�?*/
+        .right-sidebar {
+            width: 20%;
+        }
+        
+        .sidebar-card {
+            background-color: var(--community-card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .sidebar-card h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--community-text-primary);
+        }
+        
+        .user-profile {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 12px;
+        }
+        
+        .profile-name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        .profile-level {
+            color: var(--community-text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-weight: bold;
+            color: var(--community-green);
+            font-size: 18px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+            margin-top: 4px;
+        }
+        
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .badge {
+            background-color: var(--community-bg);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: var(--community-text-primary);
+        }
+        
+        .edit-profile-btn {
+            width: 100%;
+            background-color: var(--community-bg);
+            color: var(--community-text-primary);
+            border: 1px solid var(--community-border);
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-profile-btn:hover {
+            background-color: var(--community-border);
+        }
+        
+        .recommended-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .recommended-user .user-avatar {
+            width: 35px;
+            height: 35px;
+        }
+        
+        .recommended-user-info {
+            flex: 1;
+            margin-left: 10px;
+        }
+        
+        .recommended-user-name {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        
+        .recommended-user-meta {
+            font-size: 12px;
+            color: var(--community-text-secondary);
+        }
+        
+        .follow-btn {
+            background-color: var(--community-green);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .community-rules {
+            font-size: 14px;
+            color: var(--community-text-secondary);
+            line-height: 1.6;
+        }
+        
+        .community-rules p {
+            margin: 8px 0;
+        }
+        
+        .report-link {
+            color: var(--community-green);
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+        }
+        
+        /* 响应式设�?*/
+        @media (max-width: 1024px) {
+            .community-container {
+                flex-direction: column;
+            }
+            
+            .left-sidebar,
+            .main-content,
+            .right-sidebar {
+                width: 100%;
+            }
+            
+            .left-sidebar {
+                order: 2;
+            }
+            
+            .main-content {
+                order: 1;
+            }
+            
+            .right-sidebar {
+                order: 3;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航�?-->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生�?/a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="login.html" class="btn btn-primary">登录/注册</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 社区内容区域 -->
+    <section class="community">
+        <div class="community-container">
+            <!-- 左侧�?-->
+            <div class="left-sidebar">
+                <input type="text" class="search-box" placeholder="🔍 搜索内容/用户">
+                
+                <div class="sidebar-section">
+                    <h3>推荐话题</h3>
+                    <ul>
+                        <li>#太平峪攻�?/li>
+                        <li>#秦岭秋色摄影</li>
+                        <li>#亲子徒步推荐</li>
+                        <li>#农家乐美�?/li>
+                        <li>#非遗体验分享</li>
+                        <li>#生态保护行�?/li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>热门圈子</h3>
+                    <ul>
+                        <li><i class="fas fa-camera"></i> <span>摄影师联盟（1.2k人）</span></li>
+                        <li><i class="fas fa-users"></i> <span>亲子家庭游（890人）</span></li>
+                        <li><i class="fas fa-hiking"></i> <span>徒步登山组（2.3k人）</span></li>
+                        <li><i class="fas fa-palette"></i> <span>非遗文化圈（560人）</span></li>
+                        <li><i class="fas fa-leaf"></i> <span>生态志愿者（340人）</span></li>
+                    </ul>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3>官方活动</h3>
+                    <ul>
+                        <li><i class="fas fa-trophy"></i> <span>十月摄影大赛（进行中�?/span></li>
+                        <li><i class="fas fa-calendar-alt"></i> <span>周末亲子徒步（报名中�?/span></li>
+                        <li><i class="fas fa-star"></i> <span>月度优质内容评�?/span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 中间主区 -->
+            <div class="main-content">
+                <div class="top-action-bar">
+                    <button class="post-btn"><i class="fas fa-plus"></i> 发布动�?/button>
+                    <div class="filter-tabs">
+                        <div class="filter-tab active">推荐</div>
+                        <div class="filter-tab">最�?/div>
+                        <div class="filter-tab">热门</div>
+                        <div class="filter-tab">关注</div>
+                    </div>
+                </div>
+                
+                <div class="content-stream">
+                    <!-- 图文分享�?-->
+                    <div class="content-card">
+                        <div class="user-info">
+                            <img src="images/avatars/avatar-mkegcnlqxgoy-U.svg" alt="用户头像" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">王摄影师</div>
+                                <div class="user-meta">📷 认证摄影�?| 2小时�?/div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content">
+                            <div class="image-grid">
+                                <img src="images/autumn-16.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-1.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-2.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-3.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-4.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-5.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-6.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-7.jpg" alt="秦岭秋色">
+                                <img src="images/autumn-8.jpg" alt="秦岭秋色">
+                            </div>
+                            
+                            <div class="post-text">
+                                太平峪东线枫叶红了！最佳拍摄时间下�?-5点�?br>
+                                📍 <span style="color: var(--community-green);">具体位置（可点击地图�?/span>
+                            </div>
+                        </div>
+                        
+                        <div class="interaction-bar">
+                            <div class="interaction-item"><i class="fas fa-heart"></i> <span>245</span></div>
+                            <div class="interaction-item"><i class="fas fa-comment"></i> <span>32</span></div>
+                            <div class="interaction-item"><i class="fas fa-share"></i> <span>12</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 游记攻略�?-->
+                    <div class="content-card">
+                        <div class="user-info">
+                            <img src="images/avatars/avatar-mkegcnlqvu7q-U.svg" alt="用户头像" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">李妈妈亲子游</div>
+                                <div class="user-meta">1天前</div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content">
+                            <div class="post-tags">
+                                <span class="post-tag">#亲子攻略</span>
+                                <span class="post-tag">#太平�?/span>
+                            </div>
+                            
+                            <h4 class="post-title">�?岁娃游太平峪攻略</h4>
+                            
+                            <div class="post-text">
+                                分享轻松路线、必备物�?.. <br>
+                                <span class="expand-btn">[展开全文]</span>
+                            </div>
+                            
+                            <div class="practical-info">
+                                <p>�?适合年龄�?-6�?/p>
+                                <p>�?步行距离�?公里（平缓）</p>
+                                <p>�?卫生间：入口和半山腰�?/p>
+                            </div>
+                        </div>
+                        
+                        <div class="interaction-bar">
+                            <div class="interaction-item"><i class="fas fa-heart"></i> <span>189</span></div>
+                            <div class="interaction-item"><i class="fas fa-comment"></i> <span>45</span></div>
+                            <div class="interaction-item"><i class="fas fa-bookmark"></i> <span>67</span></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 问答求助�?-->
+                    <div class="content-card">
+                        <div class="user-info">
+                            <img src="images/avatars/avatar-mkegcnlq1ogf-U.svg" alt="用户头像" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">新手徒步�?/div>
+                                <div class="user-meta">3小时�?/div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content">
+                            <div class="post-tags">
+                                <span class="post-tag">#求助</span>
+                                <span class="post-tag">#装备建议</span>
+                            </div>
+                            
+                            <div class="post-text">
+                                �?第一次徒步需要哪些装备？
+                            </div>
+                            
+                            <div class="post-text" style="margin-top: 15px;">
+                                【已�?条回答】（点击展开�?br>
+                                1. 张向导：建议登山杖、防水鞋...<br>
+                                2. 李经验：关键是舒适的�?..
+                            </div>
+                            
+                            <div style="margin-top: 15px;">
+                                <button class="action-btn">我要回答</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 活动约伴�?-->
+                    <div class="content-card">
+                        <div class="user-info">
+                            <img src="images/avatars/avatar-mkegcnlrvzmw-U.svg" alt="用户头像" class="user-avatar">
+                            <div class="user-details">
+                                <div class="user-name">周末登山�?/div>
+                                <div class="user-meta">5小时�?/div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-content">
+                            <div class="post-tags">
+                                <span class="post-tag">#约伴</span>
+                                <span class="post-tag">#11月周�?/span>
+                            </div>
+                            
+                            <div class="post-text">
+                                🥾 11�?0日太平峪徒步<br>
+                                �?早上8点景区门口集�?br>
+                                📍 东线环线（中等难度）<br>
+                                👥 已有3人，再招2-3�?
+                            </div>
+                            
+                            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                                <button class="action-btn" style="flex: 1;">加入活动</button>
+                                <button class="action-btn" style="flex: 1; background-color: var(--community-bg); color: var(--community-text-primary);">私聊组织�?/button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 右侧�?-->
+            <div class="right-sidebar">
+                <div class="sidebar-card">
+                    <div class="user-profile">
+                        <img src="images/avatars/avatar-mkegcnlry3s2-U.svg" alt="用户头像" class="profile-avatar">
+                        <div class="profile-name">秦岭探索�?/div>
+                        <div class="profile-level">社区达人 Lv.3</div>
+                        
+                        <div class="profile-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">24</div>
+                                <div class="stat-label">发布</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">1.2k</div>
+                                <div class="stat-label">获赞</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">156</div>
+                                <div class="stat-label">粉丝</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">89</div>
+                                <div class="stat-label">关注</div>
+                            </div>
+                        </div>
+                        
+                        <div class="badges">
+                            <div class="badge">🏆 优质创作�?/div>
+                            <div class="badge">📍 路线探索�?/div>
+                            <div class="badge">🌟 热心助人�?/div>
+                        </div>
+                        
+                        <button class="edit-profile-btn">编辑个人主页</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3>可能认识的人</h3>
+                    <div class="recommended-user">
+                        <img src="images/avatars/avatar-mkegcnls4lpj-U.svg" alt="用户头像" class="user-avatar">
+                        <div class="recommended-user-info">
+                            <div class="recommended-user-name">张三</div>
+                            <div class="recommended-user-meta">同城，也喜欢徒步<br>共同关注：李�?/div>
+                        </div>
+                        <button class="follow-btn">关注</button>
+                    </div>
+                    
+                    <div class="recommended-user">
+                        <img src="images/avatars/avatar-mkegcnls1d6d-U.svg" alt="用户头像" class="user-avatar">
+                        <div class="recommended-user-info">
+                            <div class="recommended-user-name">王女�?/div>
+                            <div class="recommended-user-meta">上周同游太平�?br>共同话题�?亲子�?/div>
+                        </div>
+                        <button class="follow-btn">关注</button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-card">
+                    <h3>社区规则</h3>
+                    <div class="community-rules">
+                        <p>�?禁止广告营销</p>
+                        <p>�?真实分享，拒绝虚�?/p>
+                        <p>�?文明交流，友善互�?/p>
+                        <p>�?生态保护，人人有责</p>
+                    </div>
+                    <a href="#" class="report-link">举报入口 | 在线客服 💬</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 发布动态模态框 -->
+    <div id="post-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>发布动�?/h3>
+                <button id="close-post-modal" style="background: none; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: bold;">选择类型</label>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="post-type-btn active" data-type="photo">图文分享</button>
+                    <button class="post-type-btn" data-type="travel">游记攻略</button>
+                    <button class="post-type-btn" data-type="question">问答求助</button>
+                    <button class="post-type-btn" data-type="activity">活动约伴</button>
+                </div>
+                
+                <textarea placeholder="分享你的秦岭故事..." style="width: 100%; height: 150px; padding: 15px; border: 1px solid var(--community-border); border-radius: 8px; font-size: 16px; resize: vertical;"></textarea>
+                
+                <div style="margin-top: 15px; display: flex; gap: 10px;">
+                    <button class="action-btn" style="flex: 1; background-color: var(--community-bg); color: var(--community-text-primary); border: 1px solid var(--community-border);"><i class="fas fa-image"></i> 添加图片（最�?张）</button>
+                    <button class="action-btn" style="flex: 1; background-color: var(--community-bg); color: var(--community-text-primary); border: 1px solid var(--community-border);"><i class="fas fa-map-marker-alt"></i> 添加位置</button>
+                </div>
+                
+                <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <label style="font-size: 14px; color: var(--community-text-secondary); margin-right: 10px;">可见范围�?/label>
+                        <select style="padding: 6px 12px; border: 1px solid var(--community-border); border-radius: 5px; font-size: 14px;">
+                            <option value="public">公开</option>
+                            <option value="friends">仅圈�?/option>
+                            <option value="private">私密</option>
+                        </select>
+                    </div>
+                    <button class="post-btn">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .post-type-btn {
+            padding: 8px 16px;
+            border: 1px solid var(--community-border);
+            background-color: var(--community-bg);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .post-type-btn.active {
+            background-color: var(--community-green);
+            color: white;
+            border-color: var(--community-green);
+        }
+    </style>
+    
+    <script>
+        // 发布动态按钮事�?
+        document.querySelectorAll('.post-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const modal = document.getElementById('post-modal');
+                if (modal) {
+                    modal.style.display = 'flex';
+                }
+            });
+        });
+        
+        // 关闭发布动态模态框
+        document.getElementById('close-post-modal').addEventListener('click', function() {
+            const modal = document.getElementById('post-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // 点击模态框外部关闭
+        document.getElementById('post-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // 发布类型切换
+        document.querySelectorAll('.post-type-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除所有active�?
+                document.querySelectorAll('.post-type-btn').forEach(b => {
+                    b.classList.remove('active');
+                });
+                // 添加当前active�?
+                this.classList.add('active');
+            });
+        });
+        
+        // 筛选标签切�?
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                // 移除所有active�?
+                document.querySelectorAll('.filter-tab').forEach(t => {
+                    t.classList.remove('active');
+                });
+                // 添加当前active�?
+                this.classList.add('active');
+            });
+        });
+        
+        // 搜索功能
+        document.querySelector('.search-box').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const keyword = this.value.trim();
+                if (keyword) {
+                    window.location.href = `search-results.html?keyword=${encodeURIComponent(keyword)}`;
+                }
+            }
+        });
+        
+        // 推荐话题点击
+        const topicSections = document.querySelectorAll('.sidebar-section');
+        topicSections.forEach(section => {
+            const h3 = section.querySelector('h3');
+            if (h3 && h3.textContent.includes('推荐话题')) {
+                const lis = section.querySelectorAll('ul li');
+                lis.forEach(li => {
+                    li.addEventListener('click', function() {
+                        const topic = this.textContent.trim();
+                        const topicMap = {
+                            '#太平峪攻�?: 'topic-taipingyu.html',
+                            '#秦岭秋色摄影': 'topic-autumn-photo.html',
+                            '#亲子徒步推荐': 'topic-family-hiking.html',
+                            '#农家乐美�?: 'topic-farm-food.html',
+                            '#非遗体验分享': 'topic-intangible-culture.html',
+                            '#生态保护行�?: 'topic-eco-protection.html'
+                        };
+                        if (topicMap[topic]) {
+                            window.location.href = topicMap[topic];
+                        }
+                    });
+                });
+            }
+        });
+        
+        // 热门圈子点击
+        topicSections.forEach(section => {
+            const h3 = section.querySelector('h3');
+            if (h3 && h3.textContent.includes('热门圈子')) {
+                const lis = section.querySelectorAll('ul li');
+                lis.forEach(li => {
+                    li.addEventListener('click', function() {
+                        const span = this.querySelector('span');
+                        const circleName = span.textContent;
+                        const circleMap = {
+                            '摄影师联盟（1.2k人）': 'circle-photographers.html',
+                            '亲子家庭游（890人）': 'circle-family-travel.html',
+                            '徒步登山组（2.3k人）': 'circle-hiking.html',
+                            '非遗文化圈（560人）': 'circle-intangible-culture.html',
+                            '生态志愿者（340人）': 'circle-eco-volunteers.html'
+                        };
+                        if (circleMap[circleName]) {
+                            window.location.href = circleMap[circleName];
+                        }
+                    });
+                });
+            }
+        });
+        
+        // 官方活动点击
+        topicSections.forEach(section => {
+            const h3 = section.querySelector('h3');
+            if (h3 && h3.textContent.includes('官方活动')) {
+                const lis = section.querySelectorAll('ul li');
+                lis.forEach(li => {
+                    li.addEventListener('click', function() {
+                        const span = this.querySelector('span');
+                        const activityName = span.textContent;
+                        const activityMap = {
+                            '十月摄影大赛（进行中�?: 'activity-photo-contest.html',
+                            '周末亲子徒步（报名中�?: 'activity-family-hiking.html',
+                            '月度优质内容评�?: 'activity-quality-content.html'
+                        };
+                        if (activityMap[activityName]) {
+                            window.location.href = activityMap[activityName];
+                        }
+                    });
+                });
+            }
+        });
+        
+        // 完整的交互功�?
+        document.querySelectorAll('.interaction-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const icon = this.querySelector('i');
+                const span = this.querySelector('span');
+                
+                if (icon.classList.contains('fa-heart')) {
+                    // 点赞功能
+                    const count = parseInt(span.textContent);
+                    span.textContent = count + 1;
+                    icon.style.color = 'var(--community-green)';
+                } else if (icon.classList.contains('fa-comment')) {
+                    // 评论功能
+                    alert('打开评论区功能开发中...');
+                } else if (icon.classList.contains('fa-share')) {
+                    // 分享功能
+                    alert('分享功能开发中...');
+                } else if (icon.classList.contains('fa-bookmark')) {
+                    // 收藏功能
+                    const count = parseInt(span.textContent);
+                    span.textContent = count + 1;
+                    icon.style.color = 'var(--community-green)';
+                }
+            });
+        });
+        
+        // 展开全文功能
+        document.querySelectorAll('.expand-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent === '[展开全文]') {
+                    this.textContent = '[收起全文]';
+                    // 这里可以添加展开全文的逻辑
+                    alert('展开全文功能开发中...');
+                } else {
+                    this.textContent = '[展开全文]';
+                    // 这里可以添加收起全文的逻辑
+                }
+            });
+        });
+        
+        // 我要回答功能
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.textContent.includes('我要回答')) {
+                btn.addEventListener('click', function() {
+                    alert('进入回答页面功能开发中...');
+                });
+            }
+        });
+        
+        // 加入活动功能
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.textContent.includes('加入活动')) {
+                btn.addEventListener('click', function() {
+                    this.textContent = '已加�?;
+                    this.style.backgroundColor = '#2d6a4f';
+                    alert('成功加入活动�?);
+                });
+            }
+        });
+        
+        // 私聊组织者功�?
+        document.querySelectorAll('.action-btn').forEach(btn => {
+            if (btn.textContent.includes('私聊组织�?)) {
+                btn.addEventListener('click', function() {
+                    window.location.href = 'private-chat.html';
+                });
+            }
+        });
+        
+        // 关注用户功能
+        document.querySelectorAll('.follow-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.textContent === '关注') {
+                    this.textContent = '已关�?;
+                    this.style.backgroundColor = '#2d6a4f';
+                    alert('关注成功�?);
+                } else {
+                    this.textContent = '关注';
+                    this.style.backgroundColor = 'var(--community-green)';
+                    alert('已取消关注！');
+                }
+            });
+        });
+        
+        // 编辑个人主页功能
+        document.querySelector('.edit-profile-btn').addEventListener('click', function() {
+            window.location.href = 'user-center.html';
+        });
+        
+        // 点击地图位置
+        document.querySelectorAll('span').forEach(span => {
+            if (span.textContent.includes('具体位置（可点击地图�?)) {
+                span.addEventListener('click', function() {
+                    alert('打开地图功能开发中...');
+                });
+            }
+        });
+        </script>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之�?/p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链�?/h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生�?/a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新�?/li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权�?</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>

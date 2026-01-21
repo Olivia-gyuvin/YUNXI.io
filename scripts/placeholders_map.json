@@ -1,0 +1,65 @@
+{
+  "generated": 10,
+  "mapping": [
+    {
+      "placeholder": "images/placeholder-1.jpg",
+      "original": "images/ai-recommendation.jpg",
+      "file": "index.html",
+      "context": "s=\"values-grid\">\r                 <div class=\"value-card\">\r                     <img src=\"images/ai-recommendation.jpg\" alt=\"智能定制\">\r                     <h3>智能定制</h3>\r                     <p>AI为您推荐个性化"
+    },
+    {
+      "placeholder": "images/placeholder-2.jpg",
+      "original": "images/private-wechat.jpg",
+      "file": "index.html",
+      "context": "          </div>\r                 <div class=\"value-card\">\r                     <img src=\"images/private-wechat.jpg\" alt=\"私域专享\">\r                     <h3>私域专享</h3>\r                     <p>加入会员社群，享受专属福"
+    },
+    {
+      "placeholder": "images/placeholder-3.jpg",
+      "original": "images/safety-dashboard.jpg",
+      "file": "index.html",
+      "context": "          </div>\r                 <div class=\"value-card\">\r                     <img src=\"images/safety-dashboard.jpg\" alt=\"安全保障\">\r                     <h3>安全保障</h3>\r                     <p>实时监测客流情况，提"
+    },
+    {
+      "placeholder": "images/placeholder-4.jpg",
+      "original": "images/success-case.jpg",
+      "file": "merchant-cooperation.html",
+      "context": "         <div class=\"success-case\">\r                 <div>\r                     <img src=\"images/success-case.jpg\" alt=\"合作民宿\" class=\"case-image\">\r                 </div>\r                 <div>\r       "
+    },
+    {
+      "placeholder": "images/placeholder-5.jpg",
+      "original": "images/user-photo-2.jpg",
+      "file": "topic-farm-food.html",
+      "context": "sormgqqg3.svg\" alt=\"用户照片1\" class=\"post-image\">\r                                 <img src=\"images/user-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/use"
+    },
+    {
+      "placeholder": "images/placeholder-6.jpg",
+      "original": "images/user-photo-3.jpg",
+      "file": "topic-farm-food.html",
+      "context": "r-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/user-photo-3.jpg\" alt=\"用户照片3\" class=\"post-image\">\r                             </div>\r                 "
+    },
+    {
+      "placeholder": "images/placeholder-7.jpg",
+      "original": "images/user-photo-2.jpg",
+      "file": "topic-farm-food.html",
+      "context": "sormgqqg3.svg\" alt=\"用户照片1\" class=\"post-image\">\r                                 <img src=\"images/user-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/use"
+    },
+    {
+      "placeholder": "images/placeholder-8.jpg",
+      "original": "images/user-photo-3.jpg",
+      "file": "topic-farm-food.html",
+      "context": "r-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/user-photo-3.jpg\" alt=\"用户照片3\" class=\"post-image\">\r                             </div>\r                 "
+    },
+    {
+      "placeholder": "images/placeholder-9.jpg",
+      "original": "images/user-photo-2.jpg",
+      "file": "topic-farm-food.html",
+      "context": "sormgqqg3.svg\" alt=\"用户照片1\" class=\"post-image\">\r                                 <img src=\"images/user-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/use"
+    },
+    {
+      "placeholder": "images/placeholder-10.jpg",
+      "original": "images/user-photo-3.jpg",
+      "file": "topic-farm-food.html",
+      "context": "r-photo-2.jpg\" alt=\"用户照片2\" class=\"post-image\">\r                                 <img src=\"images/user-photo-3.jpg\" alt=\"用户照片3\" class=\"post-image\">\r                             </div>\r                 "
+    }
+  ]
+}

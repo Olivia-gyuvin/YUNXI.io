@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册 - 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 全局字体设置 */
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        /* 颜色规范 */
+        :root {
+            --primary-color: #3A8B5F; /* 深绿 */
+            --secondary-color: #4CAF50; /* 绿色 */
+            --error-color: #FF6B6B; /* 红色 */
+            --border-color: #E0E0E0; /* 浅灰 */
+            --background-color: #FFFFFF; /* 纯白 */
+            --secondary-background: #F8F9FA; /* 浅灰�?*/
+            --text-color: #333333;
+            --text-light: #666666;
+        }
+        /* 登录注册页面特有样式 */
+        .login-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* 左半�?- 品牌展示�?*/
+        .brand-section {
+            width: 60%;
+            background-image: url('"C:\Users\lenovo\Desktop\秦岭\2.jpg.jpg"');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            color: white;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .brand-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(58, 139, 95, 0.9));
+        }
+        
+        .brand-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .brand-title {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .brand-subtitle {
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+        
+        .brand-description {
+            font-size: 18px;
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+        
+        .brand-values {
+            margin-bottom: 40px;
+        }
+        
+        .value-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        
+        .value-item i {
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .user-testimonial {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            font-style: italic;
+        }
+        
+        /* 右半�?- 操作功能�?*/
+        .login-section {
+            width: 40%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: white;
+        }
+        
+        .login-logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-logo i {
+            margin-right: 10px;
+        }
+        
+        /* 选项卡切�?*/
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: none;
+            color: var(--gray-color);
+            position: relative;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+        
+        /* 表单区域 */
+        .form-container {
+            margin-bottom: 24px;
+        }
+        
+        .form-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            color: var(--text-color);
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--text-color);
+        }
+        
+        .form-input {
+            width: 100%;
+            height: 44px;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            background-color: var(--background-color);
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(58, 139, 95, 0.1);
+        }
+        
+        .form-input.error {
+            border-color: var(--error-color);
+        }
+        
+        .form-input.success {
+            border-color: var(--secondary-color);
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper .fa-eye,
+        .input-wrapper .fa-eye-slash {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--gray-color);
+        }
+        
+        .input-wrapper .fa-check,
+        .input-wrapper .fa-times {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+        
+        .input-wrapper .fa-check {
+            color: var(--secondary-color);
+        }
+        
+        .input-wrapper .fa-times {
+            color: var(--error-color);
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .success-message {
+            color: var(--secondary-color);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        /* 密码强度 */
+        .password-strength {
+            margin-top: 5px;
+        }
+        
+        .strength-bar {
+            height: 4px;
+            background-color: #ddd;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+        
+        .strength-fill {
+            height: 100%;
+            background-color: #e74c3c;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .strength-text {
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        /* 验证�?*/
+        .verification-code {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .verification-code .form-input {
+            flex: 1;
+        }
+        
+        .btn-code {
+            padding: 12px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-code:hover:not(:disabled) {
+            background-color: #2d6a4f;
+        }
+        
+        .btn-code:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* 记住我和忘记密码 */
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .remember-me input {
+            margin-right: 10px;
+        }
+        
+        .forgot-password {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        /* 用户类型选择 */
+        .user-type {
+            margin: 20px 0;
+        }
+        
+        .user-type-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        
+        .user-type-option input {
+            margin-right: 10px;
+        }
+        
+        /* 法律条款 */
+        .terms {
+            margin: 20px 0;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        .terms a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .terms a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 登录按钮 */
+        .btn-login {
+            width: 100%;
+            height: 48px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 24px 0;
+        }
+        
+        .btn-login:hover {
+            background-color: #2d6a4f;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 验证码按�?*/
+        .btn-code {
+            height: 44px;
+            padding: 0 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        /* 其他登录方式 */
+        .other-login {
+            margin: 24px 0;
+        }
+        
+        /* 忘记密码模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--background-color);
+            margin: 15% auto;
+            padding: 40px;
+            border-radius: 10px;
+            width: 400px;
+            position: relative;
+        }
+        
+        .close {
+            color: #aaa;
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        /* 信任要素：安全保�?*/
+        .security-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 24px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .security-info i {
+            margin-right: 8px;
+            color: var(--secondary-color);
+        }
+        
+        /* 信任要素：媒体报�?*/
+        .media-report {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        /* 其他登录方式 */
+        .other-login {
+            margin: 30px 0;
+        }
+        
+        .other-login-title {
+            text-align: center;
+            color: var(--gray-color);
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .other-login-title::before,
+        .other-login-title::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background-color: #ddd;
+        }
+        
+        .other-login-title::before {
+            left: 0;
+        }
+        
+        .other-login-title::after {
+            right: 0;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .social-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+        
+        .social-btn.wechat {
+            background-color: #07C160;
+            color: white;
+        }
+        
+        .social-btn.qq {
+            background-color: #12B7F5;
+            color: white;
+        }
+        
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* 切换链接 */
+        .switch-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--gray-color);
+        }
+        
+        .switch-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
+        
+        /* 表单切换动画 */
+        .form-panel {
+            display: none;
+        }
+        
+        .form-panel.active {
+            display: block;
+        }
+        
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+            
+            .brand-section {
+                width: 100%;
+                height: 40vh;
+                padding: 30px;
+            }
+            
+            .login-section {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .brand-title {
+                font-size: 36px;
+            }
+            
+            .brand-subtitle {
+                font-size: 20px;
+            }
+            
+            .brand-description {
+                font-size: 14px;
+            }
+            
+            .brand-values {
+                margin-bottom: 20px;
+            }
+            
+            .value-item {
+                font-size: 14px;
+            }
+            
+            .user-testimonial {
+                font-size: 14px;
+                padding: 15px;
+            }
+            
+            .login-logo {
+                font-size: 24px;
+            }
+            
+            .tab {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <!-- 左半�?- 品牌展示�?-->
+        <div class="brand-section">
+            <div class="brand-content">
+                <h1 class="brand-title">智游秦岭</h1>
+                <h2 class="brand-subtitle">云栖山水</h2>
+                <p class="brand-description">基于AI+私域流量的秦岭乡村旅游创新平�?/p>
+                
+                <div class="brand-values">
+                    <div class="value-item">
+                        <i class="fas fa-robot"></i>
+                        <span>AI智能定制行程</span>
+                    </div>
+                    <div class="value-item">
+                        <i class="fas fa-users"></i>
+                        <span>私域会员专属社群</span>
+                    </div>
+                    <div class="value-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>生态安全全程护�?/span>
+                    </div>
+                </div>
+                
+                <div class="user-testimonial">
+                    <p>“第一次知道秦岭还能这样玩！�?/p>
+                    <p style="text-align: right; margin-top: 10px; font-weight: 500;">—�?西安李女�?/p>
+                </div>
+                
+                <!-- 信任要素：成功案�?-->
+                <div style="margin-top: 40px; font-size: 14px; color: white;">
+                    <p><i class="fas fa-check-circle"></i> 已服�?0�?游客</p>
+                    <p><i class="fas fa-check-circle"></i> 连接500+商户</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右半�?- 操作功能�?-->
+        <div class="login-section">
+            <div class="login-logo">
+                <i class="fas fa-mountain"></i>
+                <span>云栖平台</span>
+            </div>
+            
+            <!-- 信任要素：平台背�?-->
+            <div style="font-size: 12px; color: var(--gray-color); margin-bottom: 20px;">
+                <i class="fas fa-award"></i> 西安财经大学创新创业项目
+            </div>
+            
+            <!-- 选项卡切�?-->
+            <div class="tabs">
+                <button class="tab active" data-tab="login">登录</button>
+                <button class="tab" data-tab="register">注册</button>
+            </div>
+            
+            <!-- 登录表单 -->
+            <div class="form-panel active" id="login">
+                <h2 class="form-title">欢迎回来�?/h2>
+                <p style="color: var(--gray-color); margin-bottom: 30px;">登录您的云栖账户</p>
+                
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="login-username">手机�?邮箱</label>
+                        <div class="input-wrapper">
+                            <input type="text" id="login-username" class="form-input" placeholder="请输入手机号或邮�?>
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="login-password">密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="login-password" class="form-input" placeholder="请输入密�?>
+                            <i class="fas fa-eye-slash" id="toggle-login-password"></i>
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <label class="remember-me">
+                            <input type="checkbox" id="remember-me">
+                            <span>记住�?/span>
+                        </label>
+                        <a href="#" class="forgot-password">忘记密码�?/a>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">登录</button>
+                </form>
+                
+                <div class="other-login">
+                    <div class="other-login-title">或使用以下方式登�?/div>
+                    <div class="social-login">
+                        <button class="social-btn wechat" title="微信登录"><i class="fab fa-weixin"></i></button>
+                        <button class="social-btn qq" title="QQ登录"><i class="fab fa-qq"></i></button>
+                    </div>
+                </div>
+                
+                <div class="switch-link">
+                    还没有账户？ <a href="#" class="switch-to-register">立即注册</a>
+                </div>
+            </div>
+            
+            <!-- 注册表单 -->
+            <div class="form-panel" id="register">
+                <h2 class="form-title">加入云栖</h2>
+                <p style="color: var(--gray-color); margin-bottom: 30px;">开启智能秦岭之�?/p>
+                
+                <form id="register-form">
+                    <div class="form-group">
+                        <label for="register-phone">手机�?/label>
+                        <div class="verification-code">
+                            <div class="input-wrapper">
+                                <input type="tel" id="register-phone" class="form-input" placeholder="请输入手机号">
+                            </div>
+                            <button type="button" class="btn-code" id="get-code">获取验证�?/button>
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-code">验证�?/label>
+                        <div class="input-wrapper">
+                            <input type="text" id="register-code" class="form-input" placeholder="请输入验证码">
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-password">设置密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="register-password" class="form-input" placeholder="请设�?-20位密�?>
+                            <i class="fas fa-eye-slash" id="toggle-register-password"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-bar">
+                                <div class="strength-fill" id="strength-fill"></div>
+                            </div>
+                            <div class="strength-text" id="strength-text">密码强度：弱</div>
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="register-confirm-password">确认密码</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="register-confirm-password" class="form-input" placeholder="请再次输入密�?>
+                            <i class="fas fa-eye-slash" id="toggle-confirm-password"></i>
+                        </div>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>用户类型</label>
+                        <div class="user-type">
+                            <label class="user-type-option">
+                                <input type="radio" name="user-type" value="tourist" checked>
+                                <span>游客（寻找秦岭旅行体验）</span>
+                            </label>
+                            <label class="user-type-option">
+                                <input type="radio" name="user-type" value="merchant">
+                                <span>商户（民�?农家�?商家�?/span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="remember-me">
+                            <input type="checkbox" id="agree-terms">
+                            <span>我已阅读并同�?/span>
+                            <a href="#" style="color: var(--primary-color);">《用户协议�?/a>
+                            <span>�?/span>
+                            <a href="#" style="color: var(--primary-color);">《隐私政策�?/a>
+                        </label>
+                        <div class="error-message"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">注册并加�?/button>
+                </form>
+                
+                <div class="other-login">
+                    <div class="other-login-title">已有账户�?/div>
+                    <a href="#" class="switch-to-login" style="display: block; text-align: center; color: var(--primary-color); text-decoration: none;">直接登录</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 信任要素：安全保�?-->
+        <div class="security-info">
+            <i class="fas fa-shield-alt"></i>
+            <span>SSL加密保护您的信息安全</span>
+        </div>
+        
+        <!-- 信任要素：媒体报�?-->
+        <div class="media-report">
+            <span>西安财经大学创新创业项目</span>
+        </div>
+        <div class="media-report">
+            <span>我们不会泄露您的个人信息</span>
+        </div>
+    </div>
+    
+    <!-- 忘记密码模态框 -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 class="form-title">忘记密码</h2>
+            <form id="forgot-password-form">
+                <div class="form-group">
+                    <label for="forgot-username">手机�?邮箱</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="forgot-username" class="form-input" placeholder="请输入手机号或邮�?>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="forgot-code">验证�?/label>
+                    <div class="verification-code">
+                        <div class="input-wrapper">
+                            <input type="text" id="forgot-code" class="form-input" placeholder="请输入验证码">
+                        </div>
+                        <button type="button" class="btn-code" id="get-forgot-code">获取验证�?/button>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-password">设置新密�?/label>
+                    <div class="input-wrapper">
+                        <input type="password" id="new-password" class="form-input" placeholder="请设置新密码">
+                        <i class="fas fa-eye-slash" id="toggle-new-password"></i>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="new-strength-fill"></div>
+                        </div>
+                        <div class="strength-text" id="new-strength-text">密码强度：弱</div>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-new-password">确认新密�?/label>
+                    <div class="input-wrapper">
+                        <input type="password" id="confirm-new-password" class="form-input" placeholder="请再次输入新密码">
+                        <i class="fas fa-eye-slash" id="toggle-confirm-new-password"></i>
+                    </div>
+                    <div class="error-message"></div>
+                </div>
+                
+                <button type="submit" class="btn-login">重置密码</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // 页面加载完成后执�?
+        document.addEventListener('DOMContentLoaded', function() {
+            // 选项卡切换功�?
+            const tabs = document.querySelectorAll('.tab');
+            const formPanels = document.querySelectorAll('.form-panel');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除所有活动状�?
+                    tabs.forEach(t => t.classList.remove('active'));
+                    formPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // 添加当前活动状�?
+                    this.classList.add('active');
+                    const targetPanel = document.getElementById(this.dataset.tab);
+                    targetPanel.classList.add('active');
+                });
+            });
+            
+            // 切换链接功能
+            document.querySelector('.switch-to-register').addEventListener('click', function(e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                formPanels.forEach(panel => panel.classList.remove('active'));
+                
+                document.querySelector('[data-tab="register"]').classList.add('active');
+                document.getElementById('register').classList.add('active');
+            });
+            
+            document.querySelector('.switch-to-login').addEventListener('click', function(e) {
+                e.preventDefault();
+                tabs.forEach(t => t.classList.remove('active'));
+                formPanels.forEach(panel => panel.classList.remove('active'));
+                
+                document.querySelector('[data-tab="login"]').classList.add('active');
+                document.getElementById('login').classList.add('active');
+            });
+            
+            // 密码显示/隐藏功能
+            function togglePasswordVisibility(inputId, toggleIconId) {
+                const passwordInput = document.getElementById(inputId);
+                const toggleIcon = document.getElementById(toggleIconId);
+                
+                toggleIcon.addEventListener('click', function() {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        toggleIcon.classList.remove('fa-eye-slash');
+                        toggleIcon.classList.add('fa-eye');
+                    } else {
+                        passwordInput.type = 'password';
+                        toggleIcon.classList.remove('fa-eye');
+                        toggleIcon.classList.add('fa-eye-slash');
+                    }
+                });
+            }
+            
+            togglePasswordVisibility('login-password', 'toggle-login-password');
+            togglePasswordVisibility('register-password', 'toggle-register-password');
+            togglePasswordVisibility('register-confirm-password', 'toggle-confirm-password');
+            
+            // 第三方登录按钮事件处�?
+            const socialBtns = document.querySelectorAll('.social-btn');
+            socialBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const platform = this.classList.contains('wechat') ? '微信' : 'QQ';
+                    alert(`正在使用${platform}登录...`);
+                    // 这里可以添加实际的第三方登录逻辑
+                });
+            });
+            
+            // 验证码倒计时功�?
+            const getCodeBtn = document.getElementById('get-code');
+            let countdown = 60;
+            
+            getCodeBtn.addEventListener('click', async function() {
+                const phoneInput = document.getElementById('register-phone');
+                const phone = phoneInput.value.trim();
+                
+                // 简单的手机号验�?
+                if (!/^1[3-9]\d{9}$/.test(phone)) {
+                    showError(phoneInput, '手机号格式不正确');
+                    return;
+                }
+                
+                try {
+                    // 发送请求到后端API获取验证�?
+                    const response = await fetch('http://localhost:3000/api/send-code', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ phone })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        // 开始倒计�?
+                        let timer = setInterval(function() {
+                            countdown--;
+                            getCodeBtn.textContent = `${countdown}s后重试`;
+                            getCodeBtn.disabled = true;
+                            
+                            if (countdown === 0) {
+                                clearInterval(timer);
+                                getCodeBtn.textContent = '获取验证�?;
+                                getCodeBtn.disabled = false;
+                                countdown = 60;
+                            }
+                        }, 1000);
+                        
+                        // 显示成功提示
+                        showSuccess(phoneInput, result.message);
+                    } else {
+                        // 显示错误信息
+                        showError(phoneInput, result.error);
+                    }
+                } catch (error) {
+                    console.error('获取验证码失�?', error);
+                    showError(phoneInput, '网络错误，请稍后重试');
+                }
+            });
+            
+            // 密码强度检�?
+            const passwordInput = document.getElementById('register-password');
+            const strengthFill = document.getElementById('strength-fill');
+            const strengthText = document.getElementById('strength-text');
+            
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                // 密码强度规则
+                if (password.length >= 6) strength++;
+                if (password.length >= 10) strength++;
+                if (/[A-Za-z]/.test(password) && /\d/.test(password)) strength++;
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+                
+                // 更新强度条和文字
+                const strengthColors = ['#e74c3c', '#f39c12', '#2ecc71', '#27ae60'];
+                const strengthTexts = ['密码强度：弱', '密码强度：中', '密码强度：强', '密码强度：很�?];
+                
+                strengthFill.style.width = `${(strength / 4) * 100}%`;
+                strengthFill.style.backgroundColor = strengthColors[strength - 1] || strengthColors[0];
+                strengthText.textContent = strengthTexts[strength - 1] || strengthTexts[0];
+            });
+            
+            // 表单验证辅助函数
+            function showError(input, message) {
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.querySelector('.error-message');
+                const inputWrapper = input.closest('.input-wrapper');
+                
+                input.classList.add('error');
+                input.classList.remove('success');
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+                
+                // 添加错误图标
+                if (!inputWrapper.querySelector('.fa-times')) {
+                    const errorIcon = document.createElement('i');
+                    errorIcon.className = 'fas fa-times';
+                    inputWrapper.appendChild(errorIcon);
+                }
+                
+                // 移除成功图标
+                const successIcon = inputWrapper.querySelector('.fa-check');
+                if (successIcon) {
+                    successIcon.remove();
+                }
+            }
+            
+            function showSuccess(input, message = '') {
+                const formGroup = input.closest('.form-group');
+                const errorElement = formGroup.querySelector('.error-message');
+                const inputWrapper = input.closest('.input-wrapper');
+                
+                input.classList.add('success');
+                input.classList.remove('error');
+                errorElement.textContent = '';
+                errorElement.style.display = 'none';
+                
+                // 添加成功图标
+                if (!inputWrapper.querySelector('.fa-check')) {
+                    const successIcon = document.createElement('i');
+                    successIcon.className = 'fas fa-check';
+                    inputWrapper.appendChild(successIcon);
+                }
+                
+                // 移除错误图标
+                const errorIcon = inputWrapper.querySelector('.fa-times');
+                if (errorIcon) {
+                    errorIcon.remove();
+                }
+            }
+            
+            // 登录表单验证
+            const loginForm = document.getElementById('login-form');
+            const loginUsername = document.getElementById('login-username');
+            const loginPassword = document.getElementById('login-password');
+            
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // 验证用户�?
+                const username = loginUsername.value.trim();
+                if (!username) {
+                    showError(loginUsername, '请输入手机号或邮�?);
+                    isValid = false;
+                } else if (!(/^1[3-9]\d{9}$/.test(username) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username))) {
+                    showError(loginUsername, '手机号或邮箱格式不正�?);
+                    isValid = false;
+                } else {
+                    showSuccess(loginUsername);
+                }
+                
+                // 验证密码
+                const password = loginPassword.value;
+                if (!password) {
+                    showError(loginPassword, '请输入密�?);
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showError(loginPassword, '密码长度不能少于6�?);
+                    isValid = false;
+                } else {
+                    showSuccess(loginPassword);
+                }
+                
+                if (isValid) {
+                    // 获取用户输入的手机号或邮�?
+                    const username = loginUsername.value.trim();
+                    // 登录成功，保存登录状态和用户名到localStorage
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userPhone', username);
+                    // 跳转到个人中�?
+                    window.location.href = 'user-center.html';
+                }
+            });
+            
+            // 注册表单验证
+            const registerForm = document.getElementById('register-form');
+            const registerPhone = document.getElementById('register-phone');
+            const registerCode = document.getElementById('register-code');
+            const registerPassword = document.getElementById('register-password');
+            const registerConfirmPassword = document.getElementById('register-confirm-password');
+            const agreeTerms = document.getElementById('agree-terms');
+            
+            registerForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // 验证手机�?
+                const phone = registerPhone.value.trim();
+                if (!phone) {
+                    showError(registerPhone, '请输入手机号');
+                    isValid = false;
+                } else if (!/^1[3-9]\d{9}$/.test(phone)) {
+                    showError(registerPhone, '手机号格式不正确');
+                    isValid = false;
+                } else {
+                    showSuccess(registerPhone);
+                }
+                
+                // 验证验证码格�?
+                const code = registerCode.value.trim();
+                if (!code) {
+                    showError(registerCode, '请输入验证码');
+                    isValid = false;
+                } else if (code.length !== 6) {
+                    showError(registerCode, '验证码格式不正确');
+                    isValid = false;
+                } else {
+                    showSuccess(registerCode);
+                }
+                
+                // 验证密码
+                const password = registerPassword.value;
+                if (!password) {
+                    showError(registerPassword, '请设置密�?);
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showError(registerPassword, '密码长度不能少于6�?);
+                    isValid = false;
+                } else {
+                    showSuccess(registerPassword);
+                }
+                
+                // 验证确认密码
+                const confirmPassword = registerConfirmPassword.value;
+                if (!confirmPassword) {
+                    showError(registerConfirmPassword, '请再次输入密�?);
+                    isValid = false;
+                } else if (confirmPassword !== password) {
+                    showError(registerConfirmPassword, '两次输入的密码不一�?);
+                    isValid = false;
+                } else {
+                    showSuccess(registerConfirmPassword);
+                }
+                
+                // 验证同意条款
+                if (!agreeTerms.checked) {
+                    showError(agreeTerms, '请阅读并同意用户协议和隐私政�?);
+                    isValid = false;
+                } else {
+                    const formGroup = agreeTerms.closest('.form-group');
+                    const errorElement = formGroup.querySelector('.error-message');
+                    errorElement.textContent = '';
+                    errorElement.style.display = 'none';
+                }
+                
+                if (isValid) {
+                    try {
+                        // 调用后端API验证验证�?
+                        const verifyResponse = await fetch('http://localhost:3000/api/verify-code', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ phone, code })
+                        });
+                        
+                        const verifyResult = await verifyResponse.json();
+                        
+                        if (verifyResponse.ok) {
+                            // 验证码验证成功，继续注册流程
+                            // 保存登录状态和手机号到localStorage
+                            localStorage.setItem('isLoggedIn', 'true');
+                            localStorage.setItem('userPhone', registerPhone.value.trim());
+                            
+                            // 获取用户类型
+                            const userType = document.querySelector('input[name="user-type"]:checked').value;
+                            
+                            // 注册成功动画
+                            alert('注册成功�?);
+                            
+                            if (userType === 'tourist') {
+                                // 游客注册成功，跳转到兴趣偏好选择（简化为直接跳转到个人中心）
+                                window.location.href = 'user-center.html';
+                            } else {
+                                // 商户注册成功，跳转到商户资质信息填写（简化为直接跳转到个人中心）
+                                alert('欢迎加入云栖商户联盟�?);
+                                window.location.href = 'user-center.html';
+                            }
+                        } else {
+                            // 验证码验证失�?
+                            showError(registerCode, verifyResult.error);
+                        }
+                    } catch (error) {
+                        console.error('验证码验证失�?', error);
+                        showError(registerCode, '网络错误，请稍后重试');
+                    }
+                }
+            });
+            
+            // 输入时实时验�?
+            const allInputs = document.querySelectorAll('.form-input');
+            allInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.trim()) {
+                        showSuccess(this);
+                    } else {
+                        this.classList.remove('success');
+                        this.classList.remove('error');
+                        const formGroup = this.closest('.form-group');
+                        const errorElement = formGroup.querySelector('.error-message');
+                        errorElement.textContent = '';
+                        errorElement.style.display = 'none';
+                        
+                        // 移除图标
+                        const inputWrapper = this.closest('.input-wrapper');
+                        const icons = inputWrapper.querySelectorAll('.fa-check, .fa-times');
+                        icons.forEach(icon => icon.remove());
+                    }
+                });
+            });
+            
+            // 忘记密码功能
+            const forgotPasswordLink = document.querySelector('.forgot-password');
+            const modal = document.getElementById('forgotPasswordModal');
+            const closeBtn = document.querySelector('.close');
+            
+            // 打开忘记密码模态框
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                modal.style.display = 'block';
+            });
+            
+            // 关闭模态框
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // 点击模态框外部关闭
+            window.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // 忘记密码表单验证
+            const forgotPasswordForm = document.getElementById('forgot-password-form');
+            const forgotUsername = document.getElementById('forgot-username');
+            const forgotCode = document.getElementById('forgot-code');
+            const newPassword = document.getElementById('new-password');
+            const confirmNewPassword = document.getElementById('confirm-new-password');
+            
+            // 忘记密码验证码倒计�?
+            const getForgotCodeBtn = document.getElementById('get-forgot-code');
+            let forgotCountdown = 60;
+            
+            getForgotCodeBtn.addEventListener('click', async function() {
+                const username = forgotUsername.value.trim();
+                
+                // 简单验�?
+                if (!username) {
+                    showError(forgotUsername, '请输入手机号或邮�?);
+                    return;
+                } else if (!(/^1[3-9]\d{9}$/.test(username) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username))) {
+                    showError(forgotUsername, '手机号或邮箱格式不正�?);
+                    return;
+                }
+                
+                // 只处理手机号，邮箱暂时不支持
+                if (!/^1[3-9]\d{9}$/.test(username)) {
+                    showError(forgotUsername, '暂仅支持手机号获取验证码');
+                    return;
+                }
+                
+                try {
+                    // 发送请求到后端API获取验证�?
+                    const response = await fetch('http://localhost:3000/api/send-code', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ phone: username })
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        // 开始倒计�?
+                        let timer = setInterval(function() {
+                            forgotCountdown--;
+                            getForgotCodeBtn.textContent = `${forgotCountdown}s后重试`;
+                            getForgotCodeBtn.disabled = true;
+                            
+                            if (forgotCountdown === 0) {
+                                clearInterval(timer);
+                                getForgotCodeBtn.textContent = '获取验证�?;
+                                getForgotCodeBtn.disabled = false;
+                                forgotCountdown = 60;
+                            }
+                        }, 1000);
+                        
+                        showSuccess(forgotUsername, result.message);
+                    } else {
+                        showError(forgotUsername, result.error);
+                    }
+                } catch (error) {
+                    console.error('获取验证码失�?', error);
+                    showError(forgotUsername, '网络错误，请稍后重试');
+                }
+            });
+            
+            // 忘记密码表单提交
+            forgotPasswordForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                let isValid = true;
+                
+                // 验证用户�?
+                const username = forgotUsername.value.trim();
+                if (!username) {
+                    showError(forgotUsername, '请输入手机号或邮�?);
+                    isValid = false;
+                } else if (!(/^1[3-9]\d{9}$/.test(username) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(username))) {
+                    showError(forgotUsername, '手机号或邮箱格式不正�?);
+                    isValid = false;
+                } else {
+                    showSuccess(forgotUsername);
+                }
+                
+                // 验证验证码格�?
+                const code = forgotCode.value.trim();
+                if (!code) {
+                    showError(forgotCode, '请输入验证码');
+                    isValid = false;
+                } else if (code.length !== 6) {
+                    showError(forgotCode, '验证码格式不正确');
+                    isValid = false;
+                } else {
+                    showSuccess(forgotCode);
+                }
+                
+                // 验证新密�?
+                const password = newPassword.value;
+                if (!password) {
+                    showError(newPassword, '请设置新密码');
+                    isValid = false;
+                } else if (password.length < 6) {
+                    showError(newPassword, '密码长度不能少于6�?);
+                    isValid = false;
+                } else {
+                    showSuccess(newPassword);
+                }
+                
+                // 验证确认密码
+                const confirmPassword = confirmNewPassword.value;
+                if (!confirmPassword) {
+                    showError(confirmNewPassword, '请再次输入新密码');
+                    isValid = false;
+                } else if (confirmPassword !== password) {
+                    showError(confirmNewPassword, '两次输入的密码不一�?);
+                    isValid = false;
+                } else {
+                    showSuccess(confirmNewPassword);
+                }
+                
+                if (isValid) {
+                    try {
+                        // 只处理手机号，邮箱暂时不支持
+                        if (!/^1[3-9]\d{9}$/.test(username)) {
+                            showError(forgotUsername, '暂仅支持手机号重置密�?);
+                            return;
+                        }
+                        
+                        // 调用后端API验证验证�?
+                        const verifyResponse = await fetch('http://localhost:3000/api/verify-code', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ phone: username, code })
+                        });
+                        
+                        const verifyResult = await verifyResponse.json();
+                        
+                        if (verifyResponse.ok) {
+                            // 验证码验证成功，继续重置密码流程
+                            // 密码重置成功，关闭模态框，跳转到登录
+                            modal.style.display = 'none';
+                            alert('密码修改成功，自动登录中...');
+                            window.location.href = 'user-center.html';
+                        } else {
+                            // 验证码验证失�?
+                            showError(forgotCode, verifyResult.error);
+                        }
+                    } catch (error) {
+                        console.error('验证码验证失�?', error);
+                        showError(forgotCode, '网络错误，请稍后重试');
+                    }
+                }
+            });
+            
+            // 忘记密码密码强度检�?
+            const strengthFillNew = document.getElementById('new-strength-fill');
+            const strengthTextNew = document.getElementById('new-strength-text');
+            
+            newPassword.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 6) strength++;
+                if (password.length >= 10) strength++;
+                if (/[A-Za-z]/.test(password) && /\d/.test(password)) strength++;
+                if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+                
+                const strengthColors = ['#e74c3c', '#f39c12', '#2ecc71', '#27ae60'];
+                const strengthTexts = ['密码强度：弱', '密码强度：中', '密码强度：强', '密码强度：很�?];
+                
+                strengthFillNew.style.width = `${(strength / 4) * 100}%`;
+                strengthFillNew.style.backgroundColor = strengthColors[strength - 1] || strengthColors[0];
+                strengthTextNew.textContent = strengthTexts[strength - 1] || strengthTexts[0];
+            });
+            
+            // 忘记密码密码显示/隐藏
+            togglePasswordVisibility('new-password', 'toggle-new-password');
+            
+            // 账号已存在处�?
+            // 这里模拟账号已存在的情况，实际项目中需要后端验�?
+            registerPhone.addEventListener('blur', function() {
+                const phone = this.value.trim();
+                if (phone && /^1[3-9]\d{9}$/.test(phone)) {
+                    // 模拟已存在的手机�?
+                    if (phone === '13800138000') {
+                        showError(this, '该手机号已注册，请直接登录或找回密码');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

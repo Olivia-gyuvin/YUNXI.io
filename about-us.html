@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人主页 - 云栖平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-mountain"></i>
+                    <span>云栖平台</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="smart-service.html">智能服务</a></li>
+                    <li><a href="private-ecology.html">私域生态</a></li>
+                    <li><a href="merchant-cooperation.html">商户合作</a></li>
+                    <li><a href="about-us.html">个人主页</a></li>
+                </ul>
+                <div class="auth-buttons">
+                    <a href="index.html" class="btn btn-primary">退出登录</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 个人中心内容 -->
+    <section class="user-center">
+        <div class="container">
+            <div class="user-center-container">
+                <!-- 左边栏 -->
+                <div class="sidebar">
+                    <div class="user-profile">
+                        <!-- 头像上传区域 -->
+                        <div class="avatar-container">
+                            <input type="file" id="avatar-input" accept="image/*" style="display: none;">
+                            <div class="avatar-wrapper">
+                                <img src="images/avatars/avatar-mkegcnks53e0-U.svg" alt="用户头像" class="profile-avatar" id="current-avatar">
+                                <div class="avatar-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>更换头像</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 名称修改区域 -->
+                        <div class="name-container">
+                            <h3 id="current-name">山水间</h3>
+                            <button class="edit-name-btn" id="edit-name-btn"><i class="fas fa-edit"></i> 编辑</button>
+                            <div class="name-edit-form" id="name-edit-form" style="display: none;">
+                                <input type="text" id="new-name" class="name-input" placeholder="请输入新昵称">
+                                <div class="name-edit-buttons">
+                                    <button type="button" id="save-name-btn" class="btn-save">保存</button>
+                                    <button type="button" id="cancel-name-btn" class="btn-cancel">取消</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-level">黄金会员</div>
+                    </div>
+                    <ul class="sidebar-menu">
+                        <li><a href="#" class="active"><i class="fas fa-home"></i> 我的主页</a></li>
+                        <li><a href="#"><i class="fas fa-route"></i> 我的行程</a></li>
+                        <li><a href="#"><i class="fas fa-shopping-cart"></i> 我的订单</a></li>
+                        <li><a href="#"><i class="fas fa-heart"></i> 我的收藏</a></li>
+                        <li><a href="#"><i class="fas fa-crown"></i> 会员中心</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> 设置</a></li>
+                    </ul>
+                </div>
+
+                <!-- 中间主区域 -->
+                <div class="main-content">
+                    <!-- 欢迎回来 -->
+                    <div class="welcome-section">
+                        <div class="welcome-text">
+                            <h2>欢迎回来，<span id="welcome-name">山水间</span>！</h2>
+                            <p>今天是2026年1月14日，秦岭的天气晴朗，适合户外活动。</p>
+                        </div>
+                        <div class="weather-info">
+                            <i class="fas fa-sun"></i>
+                            <div>
+                                <h4>秦岭天气</h4>
+                                <p>晴 12°C - 20°C</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的近期行程 -->
+                    <div class="trips-section">
+                        <div class="section-header">
+                            <h3>我的近期行程</h3>
+                            <a href="#" class="btn btn-primary">查看全部</a>
+                        </div>
+                        <div class="trip-cards">
+                            <div class="trip-card">
+                                <img src="images/autumn-1.jpg" alt="行程1">
+                                <div class="trip-info">
+                                    <h4>秦岭三日游</h4>
+                                    <p>2026-01-20 至 2026-01-22</p>
+                                    <p>已规划</p>
+                                </div>
+                            </div>
+                            <div class="trip-card">
+                                <img src="images/autumn-2.jpg" alt="行程2">
+                                <div class="trip-info">
+                                    <h4>太平峪徒步</h4>
+                                    <p>2026-02-03</p>
+                                    <p>已预定</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 我的足迹地图 -->
+                    <div class="footprint-section">
+                        <div class="section-header">
+                            <h3>我的足迹地图</h3>
+                            <a href="#" class="btn btn-primary">查看完整地图</a>
+                        </div>
+                        <div class="footprint-map">
+                            <div style="text-align: center;">
+                                <i class="fas fa-map-marked-alt" style="font-size: 64px; color: var(--primary-color); margin-bottom: 20px;"></i>
+                                <h4>秦岭足迹地图</h4>
+                                <p>您已探索了3个峪口</p>
+                                <div style="margin-top: 20px;">
+                                    <span style="background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 15px; margin: 5px;">太平峪</span>
+                                    <span style="background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 15px; margin: 5px;">沣峪口</span>
+                                    <span style="background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 15px; margin: 5px;">涝峪</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 会员特权 -->
+                    <div class="privileges-section">
+                        <div class="section-header">
+                            <h3>会员特权</h3>
+                            <a href="#" class="btn btn-primary">升级会员</a>
+                        </div>
+                        <ul class="privileges-list">
+                            <li>
+                                <span><i class="fas fa-tags"></i> 专属折扣</span>
+                                <span>8.5折</span>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-user-tie"></i> 专属顾问</span>
+                                <span>已开通</span>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-star"></i> 优先报名活动</span>
+                                <span>已开通</span>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-gift"></i> 免费体验项目</span>
+                                <span>2次/月</span>
+                            </li>
+                            <li>
+                                <span><i class="fas fa-headset"></i> 优先客服</span>
+                                <span>5分钟响应</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>云栖平台</h3>
+                    <p>智能秦岭，云栖之旅</p>
+                    <p>AI赋能+私域运营，让每一次秦岭之旅都独一无二</p>
+                </div>
+                <div class="footer-section">
+                    <h3>快速链接</h3>
+                    <ul>
+                        <li><a href="index.html">首页</a></li>
+                        <li><a href="smart-service.html">智能服务</a></li>
+                        <li><a href="private-ecology.html">私域生态</a></li>
+                        <li><a href="merchant-cooperation.html">商户合作</a></li>
+                        <li><a href="about-us.html">个人主页</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <ul>
+                        <li><i class="fas fa-phone"></i> 400-123-4567</li>
+                        <li><i class="fas fa-envelope"></i> info@yunxi-platform.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> 陕西省西安市高新区</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关注我们</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-weixin"></i></a>
+                        <a href="#"><i class="fab fa-weibo"></i></a>
+                        <a href="#"><i class="fab fa-qq"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 云栖平台. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
